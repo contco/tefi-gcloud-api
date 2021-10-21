@@ -1,0 +1,38 @@
+subgraphs:
+  terraCore:
+    routing_url: https://us-central1-tefiserver.cloudfunctions.net/terraCore-graphql
+    schema:
+      subgraph_url: https://us-central1-tefiserver.cloudfunctions.net/terraCore-graphql
+  anchor:
+    routing_url: https://us-central1-tefiserver.cloudfunctions.net/anchor-graphql
+    schema:
+      subgraph_url: https://us-central1-tefiserver.cloudfunctions.net/anchor-graphql
+  spectrum:
+    routing_url: https://us-central1-tefiserver.cloudfunctions.net/spectrum-graphql
+    schema:
+      subgraph_url: https://us-central1-tefiserver.cloudfunctions.net/spectrum-graphql
+  apollo:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/apollo-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/apollo-graphql
+  pylon:
+    routing_url: https://us-central1-tefiserver.cloudfunctions.net/pylon-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/pylon-graphql
+  terraworld:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/terraworld-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/terraworld-graphql
+  starterra:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/starterra-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/starterra-graphql
+  loterra:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/loterra-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/loterra-graphql
+  mirror:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/mirror-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/mirror-graphql
+

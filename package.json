@@ -1,0 +1,41 @@
+{
+  "name": "tefi-gcloud-api",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "license": "MIT",
+  "scripts": {
+    "build": "tsc --build",
+    "deploy-gateway": " gcloud functions deploy tefi-graphql --entry-point tefiGraphqlGateway --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-anc": "gcloud functions deploy anchor-graphql --entry-point anchorHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-core": "gcloud functions deploy terraCore-graphql --entry-point terraCoreHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-spectrum": "gcloud functions deploy spectrum-graphql --entry-point spectrumHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-apollo": "gcloud functions deploy apollo-graphql --entry-point apolloHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-pylon": "gcloud functions deploy pylon-graphql --entry-point pylonHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-terraworld": "gcloud functions deploy terraworld-graphql --entry-point terraworldHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-starterra": "gcloud functions deploy starterra-graphql --entry-point starterraHandler  --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-loterra": "gcloud functions deploy loterra-graphql --entry-point loterraHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-mirror": "gcloud functions deploy mirror-graphql --entry-point mirrorHandler --runtime nodejs14 --trigger-http --allow-unauthenticated"
+  },
+  "dependencies": {
+    "@anchor-protocol/anchor.js": "^1.2.0",
+    "@apollo/federation": "^0.33.3",
+    "@apollo/gateway": "^0.42.3",
+    "@apollo/subgraph": "^0.1.2",
+    "@contco/terra-utilities": "0.0.8",
+    "apollo-server": "^3.4.0",
+    "apollo-server-cloud-functions": "^3.4.0",
+    "apollo-server-core": "^3.4.0",
+    "axios": "^0.23.0",
+    "big.js": "^6.1.1",
+    "bignumber.js": "^9.0.1",
+    "date-fns": "^2.25.0",
+    "fetch": "^1.1.0",
+    "graphql": "^15.6.1",
+    "graphql-request": "^3.6.1",
+    "numeral": "^2.0.6"
+  },
+  "devDependencies": {
+    "@types/big.js": "^6.1.2",
+    "typescript": "^4.4.4"
+  }
+}

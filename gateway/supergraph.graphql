@@ -1,0 +1,625 @@
+schema
+  @core(feature: "https://specs.apollo.dev/core/v0.2"),
+  @core(feature: "https://specs.apollo.dev/join/v0.1", for: EXECUTION)
+{
+  query: Query
+}
+
+directive @core(as: String, feature: String!, for: core__Purpose) repeatable on SCHEMA
+
+directive @join__field(graph: join__Graph, provides: join__FieldSet, requires: join__FieldSet) on FIELD_DEFINITION
+
+directive @join__graph(name: String!, url: String!) on ENUM_VALUE
+
+directive @join__owner(graph: join__Graph!) on INTERFACE | OBJECT
+
+directive @join__type(graph: join__Graph!, key: join__FieldSet) repeatable on INTERFACE | OBJECT
+
+type Account {
+  airdrops: [Airdrops!]
+  gov: MirrorGov
+  mirrorHoldings: [MirrorHoldings!]
+  mirrorShortFarm: [MirrorShortFarm!]
+  mirrorStaking: [MirrorStaking!]
+  total: MirrorTotal
+}
+
+type AccountANC {
+  airdrops: [Airdrops!]
+  assets: [Token!]
+  burn: BurnData
+  debt: BorrowData
+  earn: EarnData
+  gov: GovData
+  pool: [LPData!]
+  total: Total
+  totalReward: String
+}
+
+type Airdrops {
+  contract: String!
+  name: String!
+  proof: [String!]
+  quantity: String!
+  round: Int!
+  symbol: String!
+  value: String!
+}
+
+type Amount {
+  amount: String
+  amountValue: String
+}
+
+type ApolloDaoAccount {
+  total: String!
+  vaults: [ApolloVaults!]
+}
+
+type ApolloVaults {
+  lpName: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token2Staked: String!
+}
+
+type AssetInfo {
+  idx: String!
+  name: String
+  price: String
+  symbol: String
+}
+
+type Assets
+  @join__owner(graph: TERRACORE)
+  @join__type(graph: TERRACORE, key: "address")
+  @join__type(graph: ANCHOR, key: "address")
+  @join__type(graph: APOLLO, key: "address")
+  @join__type(graph: LOTERRA, key: "address")
+  @join__type(graph: MIRROR, key: "address")
+  @join__type(graph: PYLON, key: "address")
+  @join__type(graph: SPECTRUM, key: "address")
+  @join__type(graph: STARTERRA, key: "address")
+  @join__type(graph: TERRAWORLD, key: "address")
+{
+  address: String! @join__field(graph: TERRACORE)
+  anchor: AccountANC @join__field(graph: ANCHOR)
+  apolloDao: ApolloDaoAccount @join__field(graph: APOLLO)
+  core: Core @join__field(graph: TERRACORE)
+  holdings: Coin @join__field(graph: TERRACORE)
+  loterra: LoterraAccount @join__field(graph: LOTERRA)
+  mirror: Account @join__field(graph: MIRROR)
+  pylon: PylonAccount @join__field(graph: PYLON)
+  spectrum: SpectrumAccount @join__field(graph: SPECTRUM)
+  starterra: StarTerraAccount @join__field(graph: STARTERRA)
+  terraSwapPool: Pool @join__field(graph: TERRACORE)
+  terraworld: TWDAccount @join__field(graph: TERRAWORLD)
+}
+
+type BorrowData {
+  ancprice: String
+  collaterals: [UserCollateral]
+  limit: String!
+  lunaprice: String
+  netApy: String
+  percentage: String
+  reward: Reward
+  totalCollateralValue: String
+  value: String
+}
+
+type BorrowInfo {
+  amount: String
+  amountValue: String
+  shortApr: String
+}
+
+type BurnData {
+  requestData: [RequestData]
+  totalBurnAmount: String
+  totalBurnAmountValue: String
+  withdrawableAmount: String
+  withdrawableValue: String
+}
+
+type Coin {
+  balance: String
+  contract: String
+  denom: String
+  name: String!
+  price: String
+  symbol: String!
+  value: String
+}
+
+type CollateralInfo {
+  collateral: String
+  collateralRatio: String
+  collateralValue: String
+  csymbol: String
+}
+
+type Core {
+  coins: [Coin]
+  staking: [LunaStaking]
+  total: CoreTotal
+}
+
+type CoreTotal {
+  assetsSum: String
+  stakedSum: String
+  unstakedSum: String
+}
+
+type DepositLogs {
+  deposit: String!
+  depositDate: String!
+  depositReleaseDate: String!
+  rewardReleaseDate: String!
+}
+
+type EarnData {
+  reward: Reward
+}
+
+type GovData {
+  apr: String!
+  name: String!
+  price: String!
+  rewards: String!
+  staked: String!
+  symbol: String!
+  value: String!
+}
+
+type LPData {
+  apr: String!
+  lpName: String!
+  rewards: String!
+  rewardsSymbol: String!
+  rewardsValue: String!
+  stakeableLp: String!
+  stakeableLpUstValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token1UnStaked: String!
+  token2Staked: String!
+  token2UnStaked: String!
+  totalLpUstValue: String!
+}
+
+type LockedInfo {
+  locked_amount: String
+  reward: String
+  rewardValue: String
+  shorted: String
+  unlock_time: String
+  unlocked_amount: String
+}
+
+type LotaGov {
+  apr: String!
+  name: String!
+  price: String!
+  rewards: String!
+  rewardsValue: String!
+  staked: String!
+  symbol: String!
+  value: String!
+}
+
+type LotaPool {
+  apy: String!
+  lpName: String!
+  price: String!
+  rewards: String!
+  rewardsSymbol: String!
+  rewardsValue: String!
+  stakeableLp: String!
+  stakeableLpUstValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token1UnStaked: String!
+  token2Staked: String!
+  token2UnStaked: String!
+  totalLpUstValue: String!
+  totalStaked: String!
+}
+
+type LoterraAccount {
+  lotaGov: LotaGov
+  lotaPool: LotaPool
+  loterraDraw: LoterraDraw
+}
+
+type LoterraDraw {
+  combinations: String!
+  drawTime: String!
+  jackpot: String!
+  ticketCounts: String!
+  ticketPrice: String!
+}
+
+type LunaStaking {
+  balance: String
+  rewards: String
+  rewardsValue: String
+  stakedValue: String
+  state: String
+  totalValue: String
+  validator: String
+}
+
+type MirrorGov {
+  apr: String!
+  name: String!
+  price: String!
+  rewards: String!
+  staked: String!
+  symbol: String!
+  value: String!
+}
+
+type MirrorHoldings {
+  balance: String!
+  contract: String!
+  name: String!
+  price: String!
+  symbol: String!
+  value: String!
+}
+
+type MirrorShortFarm {
+  assetInfo: AssetInfo
+  borrowInfo: BorrowInfo
+  collateralInfo: CollateralInfo
+  lockedInfo: LockedInfo
+}
+
+type MirrorStaking {
+  apr: String!
+  lpName: String!
+  rewards: String!
+  rewardsSymbol: String!
+  rewardsValue: String!
+  stakeableLp: String!
+  stakeableLpUstValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token1UnStaked: String!
+  token2Staked: String!
+  token2UnStaked: String!
+  totalLpUstValue: String!
+}
+
+type MirrorTotal {
+  mirrorAirdropSum: String!
+  mirrorHoldingsSum: String!
+  mirrorPoolRewardsSum: String!
+  mirrorPoolSum: String!
+}
+
+type Pool {
+  list: [PoolTokens!]
+  total: String
+}
+
+type PoolTokens {
+  lpName: String!
+  price: String!
+  stakeableLp: String!
+  stakeableLpUstValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token1UnStaked: String!
+  token2Staked: String!
+  token2UnStaked: String!
+  totalLpUstValue: String!
+}
+
+type PylonAccount {
+  gov: PylonGov
+  pylonAirdrops: [PylonAirdrops]
+  pylonGateway: [PylonGateway!]
+  pylonHoldings: [PylonHoldings!]
+  pylonPool: [PylonPool!]
+  pylonSum: PylonSum
+}
+
+type PylonAirdrops {
+  contract: String!
+  name: String!
+  proof: [String!]
+  quantity: String!
+  round: Int!
+  symbol: String!
+  value: String!
+}
+
+type PylonGateway {
+  apy: String!
+  depositLogs: [DepositLogs!]
+  poolName: String!
+  rewards: String!
+  rewardsValue: String!
+  symbol: String!
+  totalDeposit: String!
+}
+
+type PylonGov {
+  apy: String!
+  name: String!
+  price: String!
+  rewards: String!
+  rewardsValue: String!
+  staked: String!
+  symbol: String!
+  totalValue: String!
+  value: String!
+}
+
+type PylonHoldings {
+  balance: String!
+  contract: String!
+  name: String!
+  price: String!
+  symbol: String!
+  value: String!
+}
+
+type PylonPool {
+  apr: String!
+  lpName: String!
+  rewards: String!
+  rewardsSymbol: String!
+  rewardsValue: String!
+  stakeableLp: String!
+  stakeableLpUstValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token1UnStaked: String!
+  token2Staked: String!
+  token2UnStaked: String!
+  totalLpUstValue: String!
+}
+
+type PylonSum {
+  gatewayDepositsSum: String!
+  gatewayRewardsSum: String!
+  pylonAirdropSum: String!
+  pylonHoldingsSum: String!
+  pylonPoolRewardsSum: String!
+  pylonPoolSum: String!
+}
+
+type Query {
+  assets(address: String!): Assets @join__field(graph: TERRACORE)
+}
+
+type RequestData {
+  amount: Amount
+  time: Time
+}
+
+type Reward {
+  apy: String
+  name: String
+  reward: String
+  staked: String
+}
+
+type SpecFarms {
+  apy: String!
+  farm: String!
+  lpName: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  stakedSpec: String!
+  stakedSpecValue: String!
+  symbol: String!
+  tokenRewardsStaked: String!
+  tokenRewardsStakedSymbol: String!
+  tokenRewardsStakedValue: String!
+  tokenStaked: String!
+  ustStaked: String!
+}
+
+type SpecGov {
+  apr: String!
+  name: String!
+  price: String!
+  rewards: String!
+  staked: String!
+  symbol: String!
+  value: String!
+}
+
+type SpecHoldings {
+  balance: String!
+  contract: String!
+  name: String!
+  price: String!
+  symbol: String!
+  value: String!
+}
+
+type SpectrumAccount {
+  farms: [SpecFarms!]
+  specGov: SpecGov
+  specHoldings: [SpecHoldings!]
+  spectrumTotal: SpectrumTotal
+}
+
+type SpectrumTotal {
+  farmsTotal: String!
+  holdingsTotal: String!
+  rewardsTotal: String!
+}
+
+type StarStakedData {
+  bondedLp: String
+  bondedLpUstValue: String
+  faction: String!
+  lpName: String!
+  rewards: String!
+  rewardsValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  token1Bonded: String
+  token1Staked: String!
+  token2Bonded: String
+  token2Staked: String!
+  unbondingTime: String
+}
+
+type StarTerraAccount {
+  govRewardsTotal: String
+  govStakedTotal: String
+  starTerraGov: [StarTerraGov!]
+  starTerraPools: StarTerraPools
+}
+
+type StarTerraGov {
+  apr: String
+  faction: String
+  name: String
+  rewards: String
+  rewardsValue: String
+  staked: String
+  symbol: String
+  value: String
+}
+
+type StarTerraPools {
+  stakeableLp: String
+  stakeableLpUstValue: String
+  stakedData: [StarStakedData]
+  symbol1: String
+  symbol2: String
+  token1UnStaked: String
+  token2UnStaked: String
+  totalBondedLp: String
+  totalBondedLpUstValue: String
+  totalRewards: String
+  totalRewardsValue: String
+  totalStakedLp: String
+  totalStakedLpUstValue: String
+}
+
+type TWDAccount {
+  twdGov: TWDGov
+  twdHoldings: TWDHolding
+  twdPool: TWDPool
+}
+
+type TWDGov {
+  apr: String!
+  name: String!
+  price: String!
+  rewards: String!
+  rewardsValue: String!
+  staked: String!
+  symbol: String!
+  value: String!
+}
+
+type TWDHolding {
+  balance: String!
+  contract: String!
+  name: String!
+  price: String!
+  symbol: String!
+  value: String!
+}
+
+type TWDPool {
+  lpName: String!
+  price: String!
+  rewards: String!
+  rewardsSymbol: String!
+  rewardsValue: String!
+  stakeableLp: String!
+  stakeableLpUstValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token1UnStaked: String!
+  token2Staked: String!
+  token2UnStaked: String!
+  totalLpUstValue: String!
+}
+
+type Time {
+  claimableTime: String
+  requestedTime: String
+}
+
+type Token {
+  balance: String!
+  contract: String!
+  name: String!
+  price: String!
+  symbol: String!
+  value: String!
+}
+
+type Total {
+  airdropSum: String!
+  anchorHoldingsSum: String!
+  anchorPoolSum: String!
+  anchorRewardsSum: String!
+}
+
+type UserCollateral {
+  balance: String
+  collateral: String
+  price: String
+  symbol: String
+  value: String
+}
+
+enum core__Purpose {
+  """
+  `EXECUTION` features provide metadata necessary to for operation execution.
+  """
+  EXECUTION
+
+  """
+  `SECURITY` features provide metadata necessary to securely resolve fields.
+  """
+  SECURITY
+}
+
+scalar join__FieldSet
+
+enum join__Graph {
+  ANCHOR @join__graph(name: "anchor" url: "https://us-central1-tefiserver.cloudfunctions.net/anchor-graphql")
+  APOLLO @join__graph(name: "apollo" url: "http://us-central1-tefiserver.cloudfunctions.net/apollo-graphql")
+  LOTERRA @join__graph(name: "loterra" url: "http://us-central1-tefiserver.cloudfunctions.net/loterra-graphql")
+  MIRROR @join__graph(name: "mirror" url: "http://us-central1-tefiserver.cloudfunctions.net/mirror-graphql")
+  PYLON @join__graph(name: "pylon" url: "https://us-central1-tefiserver.cloudfunctions.net/pylon-graphql")
+  SPECTRUM @join__graph(name: "spectrum" url: "https://us-central1-tefiserver.cloudfunctions.net/spectrum-graphql")
+  STARTERRA @join__graph(name: "starterra" url: "http://us-central1-tefiserver.cloudfunctions.net/starterra-graphql")
+  TERRACORE @join__graph(name: "terraCore" url: "https://us-central1-tefiserver.cloudfunctions.net/terraCore-graphql")
+  TERRAWORLD @join__graph(name: "terraworld" url: "http://us-central1-tefiserver.cloudfunctions.net/terraworld-graphql")
+}
