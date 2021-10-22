@@ -1,7 +1,7 @@
 import { getPoolInfo, getPrice, wasmStoreRequest, MICRO } from '@contco/terra-utilities';
 import { contracts } from './contracts';
 import { getLpStakingInfo } from './getLpStaking';
-import { calculateAPY } from './calculateApy';
+import { calculateApr } from './calculateApr';
 
 
 const fetchAlteredPoolData = (address: string) => {
@@ -47,9 +47,9 @@ export const getAlteredStaking = async (address: string) => {
       const lotaPrice: any = getPrice(lotaPoolInfo);
       const rewards = lpRewardsInfo?.rewards / MICRO;
       const rewardsSymbol = 'LOTA';
-      const APY = calculateAPY(poolInfo, stateLpStakingInfo, lotaPoolInfo);
+      const {apr, totalStaked} = calculateApr(poolInfo, stateLpStakingInfo, lotaPoolInfo);
       const rewardsValue = lotaPrice * rewards;
-      const altePool = { ...altePoolInfo, rewards: rewards.toString(), rewardsValue: rewardsValue.toString(), rewardsSymbol, ...APY };
+      const altePool = { ...altePoolInfo, rewards: rewards.toString(), rewardsValue: rewardsValue.toString(), rewardsSymbol, apr, totalStaked };
       return altePool;
     }
     return null;
