@@ -46,6 +46,31 @@ type Airdrops {
   value: String!
 }
 
+type AltePool {
+  apr: String!
+  lpName: String!
+  price: String!
+  rewards: String!
+  rewardsSymbol: String!
+  rewardsValue: String!
+  stakeableLp: String!
+  stakeableLpUstValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token1UnStaked: String!
+  token2Staked: String!
+  token2UnStaked: String!
+  totalLpUstValue: String!
+  totalStaked: String!
+}
+
+type AlteredAccount {
+  altePool: AltePool
+}
+
 type Amount {
   amount: String
   amountValue: String
@@ -76,6 +101,7 @@ type AssetInfo {
 type Assets
   @join__owner(graph: TERRACORE)
   @join__type(graph: TERRACORE, key: "address")
+  @join__type(graph: ALTERED, key: "address")
   @join__type(graph: ANCHOR, key: "address")
   @join__type(graph: APOLLO, key: "address")
   @join__type(graph: LOTERRA, key: "address")
@@ -86,6 +112,7 @@ type Assets
   @join__type(graph: TERRAWORLD, key: "address")
 {
   address: String! @join__field(graph: TERRACORE)
+  altered: AlteredAccount @join__field(graph: ALTERED)
   anchor: AccountANC @join__field(graph: ANCHOR)
   apolloDao: ApolloDaoAccount @join__field(graph: APOLLO)
   core: Core @join__field(graph: TERRACORE)
@@ -613,6 +640,7 @@ enum core__Purpose {
 scalar join__FieldSet
 
 enum join__Graph {
+  ALTERED @join__graph(name: "altered" url: "http://us-central1-tefiserver.cloudfunctions.net/altered-graphql")
   ANCHOR @join__graph(name: "anchor" url: "https://us-central1-tefiserver.cloudfunctions.net/anchor-graphql")
   APOLLO @join__graph(name: "apollo" url: "http://us-central1-tefiserver.cloudfunctions.net/apollo-graphql")
   LOTERRA @join__graph(name: "loterra" url: "http://us-central1-tefiserver.cloudfunctions.net/loterra-graphql")

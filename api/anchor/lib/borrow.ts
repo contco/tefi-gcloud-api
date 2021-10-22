@@ -213,7 +213,6 @@ export default async (address) => {
       ancprice: ancPrice.ANCPrice,
       netApy: formatRate(netApy),
     };
-
     return result;
   }
   catch (err) {

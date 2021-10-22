@@ -74,7 +74,6 @@ export const getAnchorAccount = async (address: any) => {
   const result = {
     assets: anchorHoldings,
     debt,
-
     earn: {
       reward: {
         name: earn.reward.name,
@@ -82,9 +81,7 @@ export const getAnchorAccount = async (address: any) => {
         staked: earn.reward.staked,
       },
     },
-
     pool: poolData,
-
     gov: gov,
     burn: burn,
     airdrops,

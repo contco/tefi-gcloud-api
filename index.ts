@@ -7,5 +7,6 @@ import terraworldHandler from './api/terraworld';
 import mirrorHandler from './api/mirror';
 import starterraHandler from './api/starterra';
 import loterraHandler from './api/loterra';
+import alteredHandler from './api/altered';
 
-export {terraCoreHandler, anchorHandler, spectrumHandler, apolloHandler, pylonHandler, terraworldHandler, mirrorHandler, starterraHandler, loterraHandler};
+export {terraCoreHandler, anchorHandler, spectrumHandler, apolloHandler, pylonHandler, terraworldHandler, mirrorHandler, starterraHandler, loterraHandler, alteredHandler};

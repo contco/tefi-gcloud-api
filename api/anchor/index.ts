@@ -33,7 +33,7 @@ const typeDefs = gql`
     collateral: String
     balance: String
     price: String
-    value:String
+    value: String
     symbol: String
   }
 
@@ -42,7 +42,7 @@ const typeDefs = gql`
     limit: String!
     value: String
     collaterals: [UserCollateral]
-    totalCollateralValue:String
+    totalCollateralValue: String
     percentage: String
     lunaprice: String
     ancprice: String
