@@ -768,6 +768,13 @@
         "decimals": 6,
         "total_supply": "",
         "contract_addr": "terra1l8jgxd9uv430rdt2u58h4h7kdfxsle4w6w2ecq"
+    },
+    {
+        "name": "DPH - UST LP",
+        "symbol": "DPH",
+        "decimals": 6,
+        "total_supply": "",
+        "contract_addr": "terra1k5kumxd24cyvhf52r5u4ywlr3ztktj657wnf7a"
     }
     
 ]
