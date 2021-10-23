@@ -614,6 +614,7 @@ type TWDHolding {
 }
 
 type TWDPool {
+  apr: String!
   lpName: String!
   price: String!
   rewards: String!
