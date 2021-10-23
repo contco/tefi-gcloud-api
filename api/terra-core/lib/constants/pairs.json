@@ -575,5 +575,21 @@
         ],
         "liquidity_token": "terra1l8jgxd9uv430rdt2u58h4h7kdfxsle4w6w2ecq",
         "contract_addr": "terra1c5swgtnuunpf75klq5uztynurazuwqf0mmmcyy"
+      },
+      {
+        "asset_infos": [
+          {
+            "token": {
+              "contract_addr": "terra17jnhankdfl8vyzj6vejt7ag8uz0cjc9crkl2h7"
+            }
+          },
+          {
+            "native_token": {
+              "denom": "uusd"
+            }
+          }
+        ],
+        "liquidity_token": "terra1k5kumxd24cyvhf52r5u4ywlr3ztktj657wnf7a",
+        "contract_addr": "terra1zz39wfyyqt4tjz7dz6p7s9c8pwmcw2xzde3xl8"
       }
 ]

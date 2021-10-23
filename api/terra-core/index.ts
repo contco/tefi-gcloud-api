@@ -13,7 +13,7 @@ const typeDefs = gql`
         denom: String
         contract: String
     }
-
+ 
    type CoreTotal {
        assetsSum: String
        stakedSum: String

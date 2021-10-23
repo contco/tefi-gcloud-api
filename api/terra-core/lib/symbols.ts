@@ -78,6 +78,14 @@ export const SWAP_TOKENS = [
         isLunaPair: false,
         token_addr: "terra13xujxcrc9dqft4p9a8ls0w3j0xnzm6y2uvve8n",
         pool_addr: "terra19pg6d7rrndg4z4t0jhcd7z9nhl3p5ygqttxjll"
+    },
+    {
+        name: "Digipharm",
+        symbol: "DPH",
+        isNative: false,
+        isLunaPair: false,
+        token_addr: "terra17jnhankdfl8vyzj6vejt7ag8uz0cjc9crkl2h7",
+        pool_addr: "terra1zz39wfyyqt4tjz7dz6p7s9c8pwmcw2xzde3xl8"
     }
 ];
 
