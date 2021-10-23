@@ -1,10 +1,10 @@
 import { ApolloServer, gql } from 'apollo-server-cloud-functions';
 import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getTWDAccount } from './lib';
+import { getTFlokiAccount } from './lib';
 
 const typeDefs = gql`
 
-type TWDHolding {
+type TFlokiHolding {
     symbol: String!
     name: String!
     balance: String!
@@ -13,18 +13,7 @@ type TWDHolding {
     contract: String!
   }
 
-  type TWDGov {
-    name: String!
-    symbol: String!
-    staked: String!
-    value: String!
-    rewards: String!
-    rewardsValue: String!
-    apr: String!
-    price: String!
-  }
-
-  type TWDPool {
+  type FlokiPool {
     symbol1: String!
     symbol2: String!
     lpName: String!
@@ -44,32 +33,25 @@ type TWDHolding {
     apr: String!
   }
 
-  type TWDAccount {
-    twdHoldings: TWDHolding
-    twdGov: TWDGov
-    twdPool: TWDPool
+  type TFlokiAccount {
+    tflokiHoldings: TFlokiHolding
+    flokiPool: FlokiPool
   }
 
   extend type Assets @key(fields: "address") {
     address: String! @external
-    terraworld: TWDAccount
+    tfloki: TFlokiAccount
   }
 `;
 
 const resolvers = {
   Assets: {
-    terraworld(assets) {
-      return getTWDAccount(assets.address);
+    tfloki(assets) {
+      return getTFlokiAccount(assets.address);
     },
   },
 };
 
 const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
-
-export const config = {
-    api: {
-        bodyParser: false,
-    },
-}
 
 export default apolloServer.createHandler()

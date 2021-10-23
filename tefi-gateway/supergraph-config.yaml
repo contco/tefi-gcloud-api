@@ -39,4 +39,8 @@ subgraphs:
     routing_url: http://us-central1-tefiserver.cloudfunctions.net/altered-graphql
     schema:
       subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/altered-graphql
+  tfloki:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/tfloki-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/tfloki-graphql
 

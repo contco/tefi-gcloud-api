@@ -8,5 +8,6 @@ import mirrorHandler from './api/mirror';
 import starterraHandler from './api/starterra';
 import loterraHandler from './api/loterra';
 import alteredHandler from './api/altered';
+import tflokiHandler from './api/tfloki';
 
-export {terraCoreHandler, anchorHandler, spectrumHandler, apolloHandler, pylonHandler, terraworldHandler, mirrorHandler, starterraHandler, loterraHandler, alteredHandler};
+export {terraCoreHandler, anchorHandler, spectrumHandler, apolloHandler, pylonHandler, terraworldHandler, mirrorHandler, starterraHandler, loterraHandler, alteredHandler, tflokiHandler};

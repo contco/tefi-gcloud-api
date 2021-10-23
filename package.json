@@ -15,7 +15,8 @@
     "deploy-starterra": "gcloud functions deploy starterra-graphql --entry-point starterraHandler  --runtime nodejs14 --trigger-http --allow-unauthenticated",
     "deploy-loterra": "gcloud functions deploy loterra-graphql --entry-point loterraHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
     "deploy-mirror": "gcloud functions deploy mirror-graphql --entry-point mirrorHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
-    "deploy-altered": "gcloud functions deploy altered-graphql --entry-point alteredHandler --runtime nodejs14 --trigger-http --allow-unauthenticated"
+    "deploy-altered": "gcloud functions deploy altered-graphql --entry-point alteredHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-tfloki": "gcloud functions deploy tfloki-graphql --entry-point tflokiHandler --runtime nodejs14 --trigger-http --allow-unauthenticated"
   },
   "dependencies": {
     "@anchor-protocol/anchor.js": "^1.2.0",
