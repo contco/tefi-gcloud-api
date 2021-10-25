@@ -43,4 +43,7 @@ subgraphs:
     routing_url: http://us-central1-tefiserver.cloudfunctions.net/tfloki-graphql
     schema:
       subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/tfloki-graphql
-
+  nexus:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/nexus-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/nexus-graphql

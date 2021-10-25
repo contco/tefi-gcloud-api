@@ -106,6 +106,7 @@ type Assets
   @join__type(graph: APOLLO, key: "address")
   @join__type(graph: LOTERRA, key: "address")
   @join__type(graph: MIRROR, key: "address")
+  @join__type(graph: NEXUS, key: "address")
   @join__type(graph: PYLON, key: "address")
   @join__type(graph: SPECTRUM, key: "address")
   @join__type(graph: STARTERRA, key: "address")
@@ -120,6 +121,7 @@ type Assets
   holdings: Coin @join__field(graph: TERRACORE)
   loterra: LoterraAccount @join__field(graph: LOTERRA)
   mirror: Account @join__field(graph: MIRROR)
+  nexus: NexusAccount @join__field(graph: NEXUS)
   pylon: PylonAccount @join__field(graph: PYLON)
   spectrum: SpectrumAccount @join__field(graph: SPECTRUM)
   starterra: StarTerraAccount @join__field(graph: STARTERRA)
@@ -358,6 +360,40 @@ type MirrorTotal {
   mirrorHoldingsSum: String!
   mirrorPoolRewardsSum: String!
   mirrorPoolSum: String!
+}
+
+type NexusAccount {
+  nexusHoldings: NexusHolding
+  nexusPool: NexusPool
+}
+
+type NexusHolding {
+  balance: String!
+  contract: String!
+  name: String!
+  price: String!
+  symbol: String!
+  value: String!
+}
+
+type NexusPool {
+  apr: String!
+  lpName: String!
+  price: String!
+  rewards: String!
+  rewardsSymbol: String!
+  rewardsValue: String!
+  stakeableLp: String!
+  stakeableLpUstValue: String!
+  stakedLp: String!
+  stakedLpUstValue: String!
+  symbol1: String!
+  symbol2: String!
+  token1Staked: String!
+  token1UnStaked: String!
+  token2Staked: String!
+  token2UnStaked: String!
+  totalLpUstValue: String!
 }
 
 type Pool {
@@ -682,6 +718,7 @@ enum join__Graph {
   APOLLO @join__graph(name: "apollo" url: "http://us-central1-tefiserver.cloudfunctions.net/apollo-graphql")
   LOTERRA @join__graph(name: "loterra" url: "http://us-central1-tefiserver.cloudfunctions.net/loterra-graphql")
   MIRROR @join__graph(name: "mirror" url: "http://us-central1-tefiserver.cloudfunctions.net/mirror-graphql")
+  NEXUS @join__graph(name: "nexus" url: "http://us-central1-tefiserver.cloudfunctions.net/nexus-graphql")
   PYLON @join__graph(name: "pylon" url: "https://us-central1-tefiserver.cloudfunctions.net/pylon-graphql")
   SPECTRUM @join__graph(name: "spectrum" url: "https://us-central1-tefiserver.cloudfunctions.net/spectrum-graphql")
   STARTERRA @join__graph(name: "starterra" url: "http://us-central1-tefiserver.cloudfunctions.net/starterra-graphql")
