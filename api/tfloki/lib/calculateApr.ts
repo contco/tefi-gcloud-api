@@ -1,12 +1,12 @@
-import { MICRO } from "@contco/terra-utilities";
+import axios from "axios";
+import { TFLOKI_API } from "./constants";
 
-export const calculateApr = (poolInfo: any, stakingState: any) => {
-  if (poolInfo.total_share && stakingState.total_bond_amount) {
-    const ratio = poolInfo.total_share / poolInfo.assets[0].amount;
-    const flokiPrice = poolInfo.assets[1].amount / poolInfo.assets[0].amount;
-    const inFloki = stakingState.total_bond_amount / ratio;
-    const totalStaked = (inFloki * flokiPrice) / MICRO;
-    const apr = ((15000000 / totalStaked) * 100).toString();
-    return { apr, totalStaked: totalStaked.toString() };
+export const fetchPoolApr = async () => {
+  try {
+    const { data }: any = await axios.get(TFLOKI_API + "apr/lpstaking");
+    const apr = data ? (data / 100).toString() : "0";
+    return apr;
+  } catch (err) {
+    return "0";
   }
 };

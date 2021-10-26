@@ -30,17 +30,12 @@ export const fetchStakedLp = async (address: string) => {
   }
 };
 
-export const fetchStakingState = () => {
-  const stateLpStaking = wasmStoreRequest(TFLOKI_CONTRACTS.staking, {
-    state: {},
-  });
-  return stateLpStaking;
-};
 export const getFlokiPool = (
   availableLpInfo: any,
   stakedLpInfo: any,
   poolInfo: any,
-  tflokiPrice: string
+  tflokiPrice: string,
+  apr: string
 ) => {
   if (availableLpInfo?.balance !== "0" || stakedLpInfo?.bond_amount !== "0") {
     const {
@@ -59,7 +54,6 @@ export const getFlokiPool = (
     const rewardsValue = math.times(rewards, tflokiPrice);
     const rewardsSymbol = SYMBOL2;
     const totalLpUstValue = stakedLpUstValue + stakeableLpUstValue;
-    const apr = "0";
     return {
       symbol1: SYMBOL1,
       symbol2: SYMBOL2,
