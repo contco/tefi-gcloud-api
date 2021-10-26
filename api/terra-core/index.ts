@@ -60,7 +60,6 @@ const typeDefs = gql`
   type Assets @key(fields: "address") {
     address: String!
     core: Core
-    holdings: Coin
     terraSwapPool: Pool
   }
 

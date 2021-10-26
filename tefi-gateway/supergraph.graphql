@@ -118,7 +118,6 @@ type Assets
   anchor: AccountANC @join__field(graph: ANCHOR)
   apolloDao: ApolloDaoAccount @join__field(graph: APOLLO)
   core: Core @join__field(graph: TERRACORE)
-  holdings: Coin @join__field(graph: TERRACORE)
   loterra: LoterraAccount @join__field(graph: LOTERRA)
   mirror: Account @join__field(graph: MIRROR)
   nexus: NexusAccount @join__field(graph: NEXUS)
