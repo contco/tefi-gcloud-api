@@ -32,4 +32,6 @@ export const coinSymbolList =  {
     terra1227ppwxxj3jxz8cfgq00jgnxqcny7ryenvkwj6: "mMSFT",
     terra1l5lrxtwd98ylfy09fn866au6dp76gu8ywnudls: "MGLXY",
     terra13xujxcrc9dqft4p9a8ls0w3j0xnzm6y2uvve8n: "STT",
+    terra19djkaepjjswucys4npd5ltaxgsntl7jf0xz7w6: "TWD"
+    
 }

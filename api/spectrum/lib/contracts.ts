@@ -22,4 +22,8 @@
     pylonStaking: 'terra19nek85kaqrvzlxygw20jhy08h3ryjf5kg4ep3l',
     pylonToken: 'terra1kcthelkax4j9x8d3ny6sdag0qmxxynl3qtcrpy',
     pylonFarm: 'terra1r3675psl7s2fe0sfh0vut5z4hrywgyyfdrzg95',
+    terraworldGov: 'terra1l709gpyzpwukpq3g55j7n8kqyzataxlg4swg96',
+    terraworldStaking: 'terra10eyxljyqkcvhs4dgr534hk0wehc28tz6gwnh8a',
+    terraworldToken: 'terra19djkaepjjswucys4npd5ltaxgsntl7jf0xz7w6',
+    terraworldFarm: 'terra1cdyw7fydevn372re7xjgfh8kqrrf2lxm5k6ve3',
  }

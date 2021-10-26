@@ -36,6 +36,9 @@ const getStakedTokenSymbol = (farm: string) => {
       case 'Pylon':
         symbol = 'MINE';
         break;
+      case 'Terraworld':
+        symbol = 'TWD';
+        break;
       default:
         symbol = "SPEC";
     }

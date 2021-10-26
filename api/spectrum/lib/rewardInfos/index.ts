@@ -19,13 +19,14 @@ const fetchRewardInfos = async (address) => {
   const specRewardInfosRequest = rewardInfoRequest(address, contracts.specFarm);
   const pylonRewardInfosRequest = rewardInfoRequest(address, contracts.pylonFarm);
   const anchorRewardInfosRequest = rewardInfoRequest(address, contracts.anchorFarm);
-  const result = await Promise.all([mirrorRewardsInfoRequest, specRewardInfosRequest, pylonRewardInfosRequest, anchorRewardInfosRequest]);
+  const twdRewardInfosRequest = rewardInfoRequest(address, contracts.terraworldFarm);
+  const result = await Promise.all([mirrorRewardsInfoRequest, specRewardInfosRequest, pylonRewardInfosRequest, anchorRewardInfosRequest, twdRewardInfosRequest]);
   return result;
 }
 
 
 export const getRewardInfos = async (address: string) => {
-  const [mirrorRewardInfos, specRewardInfos, pylonRewardInfos, anchorRewardInfos] = await fetchRewardInfos(address);
-  const rewardInfos = formatRewardInfos([...mirrorRewardInfos, ...specRewardInfos, ...pylonRewardInfos, ...anchorRewardInfos]);
+  const [mirrorRewardInfos, specRewardInfos, pylonRewardInfos, anchorRewardInfos, twdRewardInfos] = await fetchRewardInfos(address);
+  const rewardInfos = formatRewardInfos([...mirrorRewardInfos, ...specRewardInfos, ...pylonRewardInfos, ...anchorRewardInfos, ...twdRewardInfos]);
   return rewardInfos;
 };

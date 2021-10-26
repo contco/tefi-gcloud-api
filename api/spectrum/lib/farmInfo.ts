@@ -25,9 +25,10 @@ export const getPoolInfos = async () => {
   const mirrorPoolPromise = fetchSpecFarmInfo(contracts.mirrorFarm);
   const specPoolPromise = fetchSpecFarmInfo(contracts.specFarm);
   const pylonPoolPromise = fetchSpecFarmInfo(contracts.pylonFarm);
-  const anchorPoolPromise = fetchSpecFarmInfo(contracts.anchorFarm)
+  const anchorPoolPromise = fetchSpecFarmInfo(contracts.anchorFarm);
+  const twdPoolPromise = fetchSpecFarmInfo(contracts.terraworldFarm);
 
-  const [mirrorPool, specPool, pylonPool, anchorPool] = await Promise.all([mirrorPoolPromise, specPoolPromise, pylonPoolPromise, anchorPoolPromise ]);
+  const [mirrorPool, specPool, pylonPool, anchorPool, twdPool] = await Promise.all([mirrorPoolPromise, specPoolPromise, pylonPoolPromise, anchorPoolPromise, twdPoolPromise ]);
 
 
   const poolInfo = {};
@@ -35,6 +36,7 @@ export const getPoolInfos = async () => {
   const specPoolInfo = {};
   const pylonPoolInfo = {};
   const anchorPoolInfo = {};
+  const twdPoolInfo = {};
 
   specPool?.pools.forEach((pool) => {
     poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Spectrum" });
@@ -56,7 +58,12 @@ export const getPoolInfos = async () => {
     anchorPoolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Anchor" });
   });
 
-  return { poolInfo, mirrorPoolInfo, specPoolInfo, pylonPoolInfo, anchorPoolInfo};
+  twdPool.pools.forEach((pool) => {
+    poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Terraworld" });
+    twdPoolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Terraworld" });
+  });
+
+  return { poolInfo, mirrorPoolInfo, specPoolInfo, pylonPoolInfo, anchorPoolInfo, twdPoolInfo};
 
 }
 
@@ -104,10 +111,10 @@ const getPoolResponses = async () => {
   return poolResponses;
 }
 
-const fetchFarmData = async (height, address) => {
+const fetchFarmData = async (height: string, address: string, poolResponses: any) => {
   const govState = getGovState(height);
   const pairRewardInfos = getRewardInfos(address);
-  const pairStatsData = getPairStatsData(height);
+  const pairStatsData = getPairStatsData(height, poolResponses);
   const result = await Promise.all([govState, pairRewardInfos, pairStatsData]);
   return result;
 }
@@ -115,12 +122,10 @@ const fetchFarmData = async (height, address) => {
 export const getFarmInfos = async (address: string) => {
   try {
   const [poolData, height, terraSwapPoolResponses, govConfig, govVaults] = await Promise.all([getPoolInfos(), getLatestBlockHeight(), getPoolResponses(), getGovConfig(), getGovVaults()]);
-  const { poolInfo, mirrorPoolInfo, specPoolInfo, pylonPoolInfo, anchorPoolInfo} = poolData;
-
-  const [govState, pairRewardInfos, pairStatsData] = await fetchFarmData(height, address);
-  
+  const { poolInfo, mirrorPoolInfo, specPoolInfo, pylonPoolInfo, anchorPoolInfo, twdPoolInfo} = poolData;
+  const [govState, pairRewardInfos, pairStatsData] = await fetchFarmData(height, address, terraSwapPoolResponses);
   const specPrice = getPrice(terraSwapPoolResponses[contracts.specToken]);
-  const pairStats =  getPairStats(height, pairStatsData, specPrice, mirrorPoolInfo, specPoolInfo, govConfig, govVaults, govState, pylonPoolInfo, anchorPoolInfo, terraSwapPoolResponses);
+  const pairStats =  getPairStats(height, pairStatsData, specPrice, mirrorPoolInfo, specPoolInfo, govConfig, govVaults, govState, pylonPoolInfo, anchorPoolInfo, terraSwapPoolResponses, twdPoolInfo);
 
   const { farmInfos, farmsTotal, rewardsTotal } = calculateFarmInfos(poolInfo, pairStats, pairRewardInfos, terraSwapPoolResponses);
   return { farms: farmInfos, farmsTotal, rewardsTotal, govApr: pairStats.govApr };

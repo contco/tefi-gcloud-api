@@ -3,8 +3,8 @@ import { calculatePairStats } from "./calculatePairStats";
 import { HEIGHT_PER_YEAR } from "../utils";
 
 
- export const getPairStats =  (height, pairStatsData, specPrice, mirrorPoolInfo, specPoolInfo, govConfig, govVaults, govState, pylonPoolInfo, anchorPoolInfo, terraSwapPoolResponses) => {  
-    const pairStats: any = calculatePairStats(pairStatsData, mirrorPoolInfo, specPoolInfo, pylonPoolInfo, anchorPoolInfo, govConfig, govVaults, terraSwapPoolResponses);
+ export const getPairStats =  (height, pairStatsData, specPrice, mirrorPoolInfo, specPoolInfo, govConfig, govVaults, govState, pylonPoolInfo, anchorPoolInfo, terraSwapPoolResponses, twdPoolInfo) => {  
+    const pairStats: any = calculatePairStats(pairStatsData, mirrorPoolInfo, specPoolInfo, pylonPoolInfo, anchorPoolInfo, govConfig, govVaults, terraSwapPoolResponses, twdPoolInfo);
     const pairStatKeys = Object.keys(pairStats);
     const totalWeight = pairStatKeys.map(key => pairStats[key].multiplier).reduce((a, b) => a + b, 0);
     const specPerHeight = govConfig.mint_end > height ? govConfig.mint_per_block : '0';
