@@ -1,10 +1,15 @@
-import { wasmStoreRequest, calculateLpBonding, getLatestBlockTime, MICRO } from '@contco/terra-utilities';
-import { date } from '../../commons';
-import { contracts } from './contracts';
+import {
+  wasmStoreRequest,
+  calculateLpBonding,
+  getLatestBlockTime,
+  MICRO,
+} from "@contco/terra-utilities";
+import { date } from "../../commons";
+import { contracts } from "./contracts";
 
-const LP_NAME = 'STT-UST';
-const TOKEN1_SYMBOL = 'UST';
-const TOKEN2_SYMBOL = 'STT';
+const LP_NAME = "STT-UST";
+const TOKEN1_SYMBOL = "UST";
+const TOKEN2_SYMBOL = "STT";
 
 export const fetchUserStarTerraStakingPools = async (address: string) => {
   try {
@@ -16,14 +21,19 @@ export const fetchUserStarTerraStakingPools = async (address: string) => {
       },
     };
 
-    const userStakingPoolPromises = contracts.lpStakingContracts.map(async (lpContract: any) => {
-      const userStakingInfo = await wasmStoreRequest(lpContract.contract, query_msg);
-      return { factionName: lpContract.faction, ...userStakingInfo };
-    });
+    const userStakingPoolPromises = contracts.lpStakingContracts.map(
+      async (lpContract: any) => {
+        const userStakingInfo = await wasmStoreRequest(
+          lpContract.contract,
+          query_msg
+        );
+        return { factionName: lpContract.faction, ...userStakingInfo };
+      }
+    );
 
     const userStakingPools = await Promise.all(userStakingPoolPromises);
     const filteredResults = userStakingPools.filter(
-      (item) => item.bond_amount !== '0' || item.rewards_per_fee.length !== 0,
+      (item) => item.bond_amount !== "0" || item.rewards_per_fee.length !== 0
     );
     return filteredResults;
   } catch (err) {
@@ -45,10 +55,10 @@ const getStakedData = (stakingPools: any, poolInfo: any, sttPrice: any) => {
   if (stakingPools.length === 0) {
     return {
       stakedData: null,
-      totalStakedLp: '0',
-      totalStakedLpUstValue: '0',
-      totalRewards: '0',
-      totalRewardsValue: '0',
+      totalStakedLp: "0",
+      totalStakedLpUstValue: "0",
+      totalRewards: "0",
+      totalRewardsValue: "0",
     };
   } else {
     let totalStakedLp = 0;
@@ -59,15 +69,23 @@ const getStakedData = (stakingPools: any, poolInfo: any, sttPrice: any) => {
     let totalRewardsValue = 0;
 
     const stakedData = stakingPools.map((stakingPool: any) => {
-      const { lpAmount, lpUstValue, token1, token2 } = calculateLpBonding(stakingPool.bond_amount, poolInfo);
+      const { lpAmount, lpUstValue, token1, token2 } = calculateLpBonding(
+        stakingPool.bond_amount,
+        poolInfo
+      );
       const rewards = stakingPool.pending_reward / MICRO;
       const rewardsValue = rewards * parseFloat(sttPrice);
-      const bondedAmount = stakingPool.rewards_per_fee[0] ? stakingPool.rewards_per_fee[0].amount : 0;
+      const bondedAmount = stakingPool.rewards_per_fee[0]
+        ? stakingPool.rewards_per_fee[0].amount
+        : 0;
       const bondedData = calculateLpBonding(bondedAmount, poolInfo);
 
       const unbondingTime = stakingPool.rewards_per_fee[0]
-        ? date.secondsToDate(Math.floor(new Date().getTime()) / 1000 + parseFloat(stakingPool.time_to_best_fee))
-        : '-';
+        ? date.secondsToDate(
+            Math.floor(new Date().getTime()) / 1000 +
+              parseFloat(stakingPool.time_to_best_fee)
+          )
+        : "-";
 
       const bondedLp = bondedData.lpAmount;
       const bondedLpUstValue = bondedData.lpUstValue;
@@ -102,8 +120,8 @@ const getStakedData = (stakingPools: any, poolInfo: any, sttPrice: any) => {
       stakedData,
       totalStakedLp: totalStakedLp.toString(),
       totalStakedLpUstValue: totalStakedLpUstValue.toString(),
-			totalBondedLp: totalBondedLp.toString(),
-			totalBondedLpUstValue: totalBondedLpUstValue.toString(),
+      totalBondedLp: totalBondedLp.toString(),
+      totalBondedLpUstValue: totalBondedLpUstValue.toString(),
       totalRewards: totalRewards.toString(),
       totalRewardsValue: totalRewardsValue.toString(),
     };
@@ -111,10 +129,18 @@ const getStakedData = (stakingPools: any, poolInfo: any, sttPrice: any) => {
 };
 
 const getStakeAbleData = (userLpData: any, poolInfo: any) => {
-  if (userLpData?.balance === '0' && userLpData?.pending_reward === '0') {
-    return { stakeableLp: '0', stakeableLpUstValue: '0', token1UnStaked: '0', token2UnStaked: '0' };
+  if (userLpData?.balance === "0" && userLpData?.pending_reward === "0") {
+    return {
+      stakeableLp: "0",
+      stakeableLpUstValue: "0",
+      token1UnStaked: "0",
+      token2UnStaked: "0",
+    };
   } else {
-    const { lpAmount, lpUstValue, token1, token2 } = calculateLpBonding(userLpData.balance, poolInfo);
+    const { lpAmount, lpUstValue, token1, token2 } = calculateLpBonding(
+      userLpData.balance,
+      poolInfo
+    );
     return {
       stakeableLp: lpAmount.toString(),
       stakeableLpUstValue: lpUstValue.toString(),
@@ -124,12 +150,21 @@ const getStakeAbleData = (userLpData: any, poolInfo: any) => {
   }
 };
 
-export const getStarTerraPools = (userStakingPools: any, userLpData: any, poolInfo: any, sttPrice: string) => {
-  const { stakedData, totalStakedLp, totalStakedLpUstValue, totalBondedLp, totalBondedLpUstValue, totalRewards, totalRewardsValue } = getStakedData(
-    userStakingPools,
-    poolInfo,
-    sttPrice,
-  );
+export const getStarTerraPools = (
+  userStakingPools: any,
+  userLpData: any,
+  poolInfo: any,
+  sttPrice: string
+) => {
+  const {
+    stakedData,
+    totalStakedLp,
+    totalStakedLpUstValue,
+    totalBondedLp,
+    totalBondedLpUstValue,
+    totalRewards,
+    totalRewardsValue,
+  } = getStakedData(userStakingPools, poolInfo, sttPrice);
   const stakeableData = getStakeAbleData(userLpData, poolInfo);
 
   return {
@@ -138,8 +173,8 @@ export const getStarTerraPools = (userStakingPools: any, userLpData: any, poolIn
     symbol2: TOKEN2_SYMBOL,
     totalStakedLp,
     totalStakedLpUstValue,
-		totalBondedLp,
-		totalBondedLpUstValue,	
+    totalBondedLp,
+    totalBondedLpUstValue,
     totalRewards,
     totalRewardsValue,
     ...stakeableData,

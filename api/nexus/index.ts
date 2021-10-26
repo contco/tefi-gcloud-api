@@ -1,10 +1,9 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getNexusAccount } from './lib';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
+import { getNexusAccount } from "./lib";
 
 const typeDefs = gql`
-
-type NexusHolding {
+  type NexusHolding {
     symbol: String!
     name: String!
     balance: String!
@@ -52,6 +51,8 @@ const resolvers = {
   },
 };
 
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
-export default apolloServer.createHandler()
+export default apolloServer.createHandler();

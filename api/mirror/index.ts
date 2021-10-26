@@ -1,21 +1,21 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getMirrorAccount } from './lib/getAccountData';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
+import { getMirrorAccount } from "./lib/getAccountData";
 
 const typeDefs = gql`
   type MirrorStaking {
     symbol1: String!
     symbol2: String!
     lpName: String!
-    token1UnStaked:String!
-    token2UnStaked:String!
-    token1Staked:String!
-    token2Staked:String!
+    token1UnStaked: String!
+    token2UnStaked: String!
+    token1Staked: String!
+    token2Staked: String!
     stakedLp: String!
     stakedLpUstValue: String!
-    stakeableLp:String!
-    stakeableLpUstValue:String!
-    totalLpUstValue:String!
+    stakeableLp: String!
+    stakeableLpUstValue: String!
+    totalLpUstValue: String!
     rewards: String!
     rewardsValue: String!
     rewardsSymbol: String!
@@ -116,12 +116,14 @@ const resolvers = {
   },
 };
 
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
 export const config = {
-    api: {
-        bodyParser: false,
-    },
-}
+  api: {
+    bodyParser: false,
+  },
+};
 
-export default apolloServer.createHandler()
+export default apolloServer.createHandler();

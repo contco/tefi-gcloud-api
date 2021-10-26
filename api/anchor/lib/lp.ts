@@ -1,12 +1,11 @@
 /* eslint-disable no-console */
-import { getLatestBlockHeight } from '@contco/terra-utilities';
-import { ContractAddresses } from './test-defaults';
-import { mantleFetch, MICRO } from './utils';
-import big from 'big.js';
-import { ancPriceQuery } from './ancPrice';
-import { getAnchorApyStats } from './getAncApyStats';
-import { MANTLE_URL } from '../../constants';
-
+import { getLatestBlockHeight } from "@contco/terra-utilities";
+import { ContractAddresses } from "./test-defaults";
+import { mantleFetch, MICRO } from "./utils";
+import big from "big.js";
+import { ancPriceQuery } from "./ancPrice";
+import { getAnchorApyStats } from "./getAncApyStats";
+import { MANTLE_URL } from "../../constants";
 
 export const REWARDS_CLAIMABLE_ANC_UST_LP_REWARDS_QUERY = `
   query (
@@ -30,15 +29,17 @@ export const REWARDS_CLAIMABLE_ANC_UST_LP_REWARDS_QUERY = `
   }
 `;
 
-
-export const rewardsClaimableAncUstLpRewardsQuery = async (mantleEndpoint, address) => {
+export const rewardsClaimableAncUstLpRewardsQuery = async (
+  mantleEndpoint,
+  address
+) => {
   try {
     const blockHeight = await getLatestBlockHeight();
     const rawData = await mantleFetch(
       REWARDS_CLAIMABLE_ANC_UST_LP_REWARDS_QUERY,
       {
-        ancUstLpContract: ContractAddresses['ancUstLP'],
-        ancUstLpStakingContract: ContractAddresses['staking'],
+        ancUstLpContract: ContractAddresses["ancUstLP"],
+        ancUstLpStakingContract: ContractAddresses["staking"],
         ancUstLpBalanceQuery: JSON.stringify({
           balance: {
             address: address,
@@ -51,7 +52,7 @@ export const rewardsClaimableAncUstLpRewardsQuery = async (mantleEndpoint, addre
           },
         }),
       },
-      `${mantleEndpoint}?rewards--claimable-anc-ust-lp-rewards`,
+      `${mantleEndpoint}?rewards--claimable-anc-ust-lp-rewards`
     );
     return {
       lPBalance: JSON.parse(rawData?.lPBalance?.Result),
@@ -59,28 +60,41 @@ export const rewardsClaimableAncUstLpRewardsQuery = async (mantleEndpoint, addre
     };
   } catch (err) {
     return {
-      lPBalance: { balance: "0"},
-      lPStakerInfo: { bond_amount: "0", pending_reward: "0"}
+      lPBalance: { balance: "0" },
+      lPStakerInfo: { bond_amount: "0", pending_reward: "0" },
     };
   }
 };
 
 export const getAncPoolData = async (address) => {
   try {
-    const poolPromise = rewardsClaimableAncUstLpRewardsQuery(MANTLE_URL, address);
+    const poolPromise = rewardsClaimableAncUstLpRewardsQuery(
+      MANTLE_URL,
+      address
+    );
     const ancDataPromise = ancPriceQuery(MANTLE_URL);
     const rewardsApyPromise = getAnchorApyStats();
 
-    const [pool, ancData, rewardsApy]: any = await Promise.all([poolPromise, ancDataPromise, rewardsApyPromise]);
-    if (pool && (pool?.lPStakerInfo?.bond_amount != '0' || pool?.lPBalance?.balance != '0')) {
-      const symbol1 = 'UST';
-      const symbol2 = 'ANC';
-      const lpName = 'ANC-UST LP';
-      const apy = rewardsApy?.lpRewardApy
+    const [pool, ancData, rewardsApy]: any = await Promise.all([
+      poolPromise,
+      ancDataPromise,
+      rewardsApyPromise,
+    ]);
+    if (
+      pool &&
+      (pool?.lPStakerInfo?.bond_amount != "0" ||
+        pool?.lPBalance?.balance != "0")
+    ) {
+      const symbol1 = "UST";
+      const symbol2 = "ANC";
+      const lpName = "ANC-UST LP";
+      const apy = rewardsApy?.lpRewardApy;
       const stakeableLp = parseFloat(pool?.lPBalance?.balance) / MICRO;
       const stakedLp = parseFloat(pool?.lPStakerInfo?.bond_amount) / MICRO;
       const lpValue: any = big(ancData?.ancPrice?.USTPoolSize)
-        ?.div(ancData?.ancPrice?.LPShare === '0' ? 1 : ancData?.ancPrice?.LPShare)
+        ?.div(
+          ancData?.ancPrice?.LPShare === "0" ? 1 : ancData?.ancPrice?.LPShare
+        )
         ?.mul(2);
       const token1Staked = (stakedLp / 2) * parseFloat(lpValue);
       const token2Staked = token1Staked / ancData?.ancPrice?.ANCPrice;
@@ -88,17 +102,37 @@ export const getAncPoolData = async (address) => {
       const token2UnStaked = token1UnStaked / ancData?.ancPrice?.ANCPrice;
       const stakedLpUstValue = stakedLp * parseFloat(lpValue);
       const stakeableLpUstValue = stakeableLp * parseFloat(lpValue);
-      const totalLpUstValue = (stakedLpUstValue + stakeableLpUstValue).toString();
+      const totalLpUstValue = (
+        stakedLpUstValue + stakeableLpUstValue
+      ).toString();
       const rewards = parseFloat(pool?.lPStakerInfo?.pending_reward) / MICRO;
       const rewardsValue = rewards * ancData?.ancPrice?.ANCPrice;
 
-      const poolData = [{ symbol1, symbol2, lpName, apr: apy, stakeableLp: stakeableLp.toString(), stakedLp: stakedLp.toString(), totalLpUstValue, token1Staked: token1Staked.toString(), token1UnStaked: token1UnStaked.toString(), token2Staked: token2Staked.toString(), token2UnStaked: token2UnStaked.toString(), stakedLpUstValue: stakedLpUstValue.toString(), stakeableLpUstValue: stakeableLpUstValue.toString(), rewards: rewards.toString(), rewardsValue: rewardsValue.toString(), rewardsSymbol: symbol2 }];
+      const poolData = [
+        {
+          symbol1,
+          symbol2,
+          lpName,
+          apr: apy,
+          stakeableLp: stakeableLp.toString(),
+          stakedLp: stakedLp.toString(),
+          totalLpUstValue,
+          token1Staked: token1Staked.toString(),
+          token1UnStaked: token1UnStaked.toString(),
+          token2Staked: token2Staked.toString(),
+          token2UnStaked: token2UnStaked.toString(),
+          stakedLpUstValue: stakedLpUstValue.toString(),
+          stakeableLpUstValue: stakeableLpUstValue.toString(),
+          rewards: rewards.toString(),
+          rewardsValue: rewardsValue.toString(),
+          rewardsSymbol: symbol2,
+        },
+      ];
       const anchorRewardsSum = rewardsValue.toString();
       return { poolData, anchorPoolSum: totalLpUstValue, anchorRewardsSum };
     }
-    return { poolData: [], anchorPoolSum: '0', anchorRewardsSum: '0' };
+    return { poolData: [], anchorPoolSum: "0", anchorRewardsSum: "0" };
+  } catch (err) {
+    return { poolData: [], anchorPoolSum: "0", anchorRewardsSum: "0" };
   }
-  catch (err) {
-    return { poolData: [], anchorPoolSum: '0', anchorRewardsSum: '0' };
-  }
-}
+};

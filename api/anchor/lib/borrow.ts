@@ -1,18 +1,18 @@
-import { MARKET_DENOMS } from '@anchor-protocol/anchor.js';
-import { LCD_URL, MICRO, getLatestBlockHeight} from '@contco/terra-utilities';
-import { anchor, blocksPerYear, ContractAddresses } from './test-defaults';
-import { mantleFetch } from './utils';
-import { formatRate, valueConversion } from './utils';
-import { MANTLE_URL, LUNA_DENOM, BASSETS_INFO } from '../../constants';
-import axios from 'axios';
-import { ancPriceQuery } from './ancPrice';
-import { fetchData } from '../../commons';
-import { getAnchorApyStats } from './getAncApyStats';
-import { getPriceFromFCD  } from '../../commons';
+import { MARKET_DENOMS } from "@anchor-protocol/anchor.js";
+import { LCD_URL, MICRO, getLatestBlockHeight } from "@contco/terra-utilities";
+import { anchor, blocksPerYear, ContractAddresses } from "./test-defaults";
+import { mantleFetch } from "./utils";
+import { formatRate, valueConversion } from "./utils";
+import { MANTLE_URL, LUNA_DENOM, BASSETS_INFO } from "../../constants";
+import axios from "axios";
+import { ancPriceQuery } from "./ancPrice";
+import { fetchData } from "../../commons";
+import { getAnchorApyStats } from "./getAncApyStats";
+import { getPriceFromFCD } from "../../commons";
 
-const name = 'UST Borrow';
+const name = "UST Borrow";
 
-const bETHContract = 'terra1dzhzukyezv0etz22ud940z7adyv7xgcjkahuun'
+const bETHContract = "terra1dzhzukyezv0etz22ud940z7adyv7xgcjkahuun";
 
 export const REWARDS_CLAIMABLE_UST_BORROW_REWARDS_QUERY = `
   query (
@@ -75,12 +75,18 @@ export const GET_COLLATERALS_QUERY = `
 `;
 
 export const getBorrowLimit = async ({ address }: any) => {
-  const result = await anchor.borrow.getBorrowLimit({ market: MARKET_DENOMS.UUSD, address });
+  const result = await anchor.borrow.getBorrowLimit({
+    market: MARKET_DENOMS.UUSD,
+    address,
+  });
   return result;
 };
 
 export const getBorrowedValue = async ({ address }: any) => {
-  const result = await anchor.borrow.getBorrowedValue({ market: MARKET_DENOMS.UUSD, address });
+  const result = await anchor.borrow.getBorrowedValue({
+    market: MARKET_DENOMS.UUSD,
+    address,
+  });
   return result.toString();
 };
 
@@ -88,52 +94,55 @@ export const getCollaterals = async ({ address }: any) => {
   const rawData = await mantleFetch(
     GET_COLLATERALS_QUERY,
     {
-      overseerContract: ContractAddresses['overseer'],
+      overseerContract: ContractAddresses["overseer"],
       getCollateralsQuery: JSON.stringify({
         collaterals: {
           borrower: address,
         },
       }),
     },
-    `${MANTLE_URL}?borrow--borrower`,
+    `${MANTLE_URL}?borrow--borrower`
   );
 
-  const result = JSON.parse(rawData?.overseerCollaterals?.Result)
+  const result = JSON.parse(rawData?.overseerCollaterals?.Result);
 
-  const bEthRequest: any = await fetchData(BASSETS_INFO + 'beth');
+  const bEthRequest: any = await fetchData(BASSETS_INFO + "beth");
   const bEthPrice = bEthRequest?.data?.beth_price;
 
-  const bLUNARequest: any = await fetchData(BASSETS_INFO + 'bluna');
+  const bLUNARequest: any = await fetchData(BASSETS_INFO + "bluna");
   const bLUNAPrice: any = bLUNARequest?.data?.bLuna_price;
   let totalValue = 0;
-  if (result?.collaterals.length){
+  if (result?.collaterals.length) {
     const resultCollateral = result.collaterals.map((item) => {
       const collateral = item[0];
       const price = collateral == bETHContract ? bEthPrice : bLUNAPrice;
-      const balance = parseFloat(item[1])/ MICRO || 0;
-      const value = (balance * parseFloat(price));
-      totalValue += value; 
+      const balance = parseFloat(item[1]) / MICRO || 0;
+      const value = balance * parseFloat(price);
+      totalValue += value;
       return {
         collateral,
-        balance:balance.toString(),
+        balance: balance.toString(),
         price,
-        value:value.toString(),
-        symbol: collateral == bETHContract ? "bEth" : "bLuna"
-      }
+        value: value.toString(),
+        symbol: collateral == bETHContract ? "bEth" : "bLuna",
+      };
     });
-    return {totalValue:totalValue.toString(),resultCollateral}
+    return { totalValue: totalValue.toString(), resultCollateral };
   }
-  return {totalValue:"0",resultCollateral:[]}
+  return { totalValue: "0", resultCollateral: [] };
 };
 
-export const rewardsClaimableUstBorrowRewardsQuery = async (mantleEndpoint, address) => {
+export const rewardsClaimableUstBorrowRewardsQuery = async (
+  mantleEndpoint,
+  address
+) => {
   const blockHeight = await getLatestBlockHeight();
 
   const rawData = await mantleFetch(
     REWARDS_CLAIMABLE_UST_BORROW_REWARDS_QUERY,
     {
-      marketContract: ContractAddresses['moneyMarket'],
-      ancContract: ContractAddresses['cw20'],
+      marketContract: ContractAddresses["moneyMarket"],
+      ancContract: ContractAddresses["cw20"],
       borrowerInfoQuery: JSON.stringify({
         borrower_info: {
           borrower: address,
@@ -149,7 +158,7 @@ export const rewardsClaimableUstBorrowRewardsQuery = async (mantleEndpoint, addr
         state: {},
       }),
     },
-    `${mantleEndpoint}?rewards--claimable-ust-borrow-rewards`,
+    `${mantleEndpoint}?rewards--claimable-ust-borrow-rewards`
   );
 
   return {
@@ -160,30 +169,53 @@ export const rewardsClaimableUstBorrowRewardsQuery = async (mantleEndpoint, addr
 };
 
 export const getBorrowRate = async () => {
-  const market_states: any = await axios.get(`${MANTLE_URL}?borrow--market-states`, {
-    params: {
-      query: BORROW_RATE_QUERY,
-      variables: { marketContract: 'terra1sepfj7s0aeg5967uxnfk4thzlerrsktkpelm5s' },
-    },
-  });
-
-  const rate = await axios.get(LCD_URL + `wasm/contracts/terra1kq8zzq5hufas9t0kjsjc62t2kucfnx8txf547n/store`, {
-    params: {
-      query_msg: JSON.stringify({
-        borrow_rate: {
-          market_balance: market_states.data.data.marketBalances.Result[0].Amount,
-          total_reserves: JSON.parse(market_states.data.data.marketState.Result)['total_reserves'],
-          total_liabilities: JSON.parse(market_states.data.data.marketState.Result)['total_liabilities'],
+  const market_states: any = await axios.get(
+    `${MANTLE_URL}?borrow--market-states`,
+    {
+      params: {
+        query: BORROW_RATE_QUERY,
+        variables: {
+          marketContract: "terra1sepfj7s0aeg5967uxnfk4thzlerrsktkpelm5s",
         },
-      }),
-    },
-  });
+      },
+    }
+  );
+
+  const rate = await axios.get(
+    LCD_URL +
+      `wasm/contracts/terra1kq8zzq5hufas9t0kjsjc62t2kucfnx8txf547n/store`,
+    {
+      params: {
+        query_msg: JSON.stringify({
+          borrow_rate: {
+            market_balance:
+              market_states.data.data.marketBalances.Result[0].Amount,
+            total_reserves: JSON.parse(
+              market_states.data.data.marketState.Result
+            )["total_reserves"],
+            total_liabilities: JSON.parse(
+              market_states.data.data.marketState.Result
+            )["total_liabilities"],
+          },
+        }),
+      },
+    }
+  );
 
   return rate;
 };
 export default async (address) => {
   try {
-    const [borrowLimit, borrowedValue, collateralsData, allRewards, rewards, lunaPrice, borrowRate, { ancPrice }] : any = await Promise.all([
+    const [
+      borrowLimit,
+      borrowedValue,
+      collateralsData,
+      allRewards,
+      rewards,
+      lunaPrice,
+      borrowRate,
+      { ancPrice },
+    ]: any = await Promise.all([
       getBorrowLimit({ address }),
       getBorrowedValue({ address }),
       getCollaterals({ address }),
@@ -191,13 +223,17 @@ export default async (address) => {
       rewardsClaimableUstBorrowRewardsQuery(MANTLE_URL, address),
       getPriceFromFCD(LUNA_DENOM),
       getBorrowRate(),
-      ancPriceQuery(MANTLE_URL)
+      ancPriceQuery(MANTLE_URL),
     ]);
-    const percentage = (parseFloat(borrowedValue) / parseFloat(borrowLimit)) * 100 * 0.6;
+    const percentage =
+      (parseFloat(borrowedValue) / parseFloat(borrowLimit)) * 100 * 0.6;
     const distributionAPY = allRewards?.distributionAPY;
     const borrowApy = borrowRate?.data?.result?.rate * blocksPerYear;
     const netApy = (parseFloat(distributionAPY) - borrowApy).toString();
-    const collaterals = collateralsData.resultCollateral.length > 0 ? collateralsData.resultCollateral : null;
+    const collaterals =
+      collateralsData.resultCollateral.length > 0
+        ? collateralsData.resultCollateral
+        : null;
     const result = {
       reward: {
         name,
@@ -214,23 +250,22 @@ export default async (address) => {
       netApy: formatRate(netApy),
     };
     return result;
-  }
-  catch (err) {
+  } catch (err) {
     const result = {
       reward: {
         name,
-        apy: '0',
-        reward: '0',
+        apy: "0",
+        reward: "0",
       },
-      limit: '0',
-      value: '0',
+      limit: "0",
+      value: "0",
       collaterals: null,
-      totalCollateralValue:"0",
-      percentage: '0',
-      lunaprice: '0',
-      ancprice: '0',
-      netApy: '0',
-      bEthPrice: '0',
+      totalCollateralValue: "0",
+      percentage: "0",
+      lunaprice: "0",
+      ancprice: "0",
+      netApy: "0",
+      bEthPrice: "0",
     };
     return result;
   }

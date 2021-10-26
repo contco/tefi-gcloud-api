@@ -1,16 +1,15 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
 import { getSpectrumAccount } from "./lib";
 
 const typeDefs = gql`
-
   type SpecHoldings {
-      name: String!
-      symbol: String!
-      balance: String!
-      value: String!
-      price: String!
-      contract: String!
+    name: String!
+    symbol: String!
+    balance: String!
+    value: String!
+    price: String!
+    contract: String!
   }
 
   type SpecFarms {
@@ -28,7 +27,7 @@ const typeDefs = gql`
     tokenRewardsStakedValue: String!
     apy: String!
   }
-  
+
   type SpecGov {
     name: String!
     symbol: String!
@@ -62,17 +61,18 @@ const resolvers = {
   Assets: {
     spectrum(assets) {
       return getSpectrumAccount(assets.address);
-    }
+    },
   },
-
 };
 
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
 export const config = {
-    api: {
-        bodyParser: false,
-    },
-}
+  api: {
+    bodyParser: false,
+  },
+};
 
-export default apolloServer.createHandler()
+export default apolloServer.createHandler();

@@ -1,6 +1,6 @@
-import big from 'big.js';
-import { ContractAddresses } from './test-defaults';
-import { mantleFetch } from './utils';
+import big from "big.js";
+import { ContractAddresses } from "./test-defaults";
+import { mantleFetch } from "./utils";
 
 export const ANC_PRICE_QUERY = `
   query ($ancUstPairContract: String!, $poolInfoQuery: String!) {
@@ -13,16 +13,16 @@ export const ANC_PRICE_QUERY = `
   }
 `;
 
-export const ancPriceQuery = async ( mantleEndpoint ) => {
+export const ancPriceQuery = async (mantleEndpoint) => {
   const rawData = await mantleFetch(
     ANC_PRICE_QUERY,
     {
-      ancUstPairContract: ContractAddresses['ancUstPair'],
+      ancUstPairContract: ContractAddresses["ancUstPair"],
       poolInfoQuery: JSON.stringify({
         pool: {},
       }),
     },
-    `${mantleEndpoint}?anc--price`,
+    `${mantleEndpoint}?anc--price`
   );
 
   const { assets, total_share } = JSON.parse(rawData?.ancPrice?.Result);
@@ -31,7 +31,7 @@ export const ancPriceQuery = async ( mantleEndpoint ) => {
   const USTPoolSize: any = assets[1].amount as unknown;
   const LPShare = total_share as unknown;
   const ANCPrice = big(USTPoolSize)
-    .div(+ANCPoolSize === 0 ? '1' : ANCPoolSize)
+    .div(+ANCPoolSize === 0 ? "1" : ANCPoolSize)
     .toString();
 
   return {
@@ -39,7 +39,7 @@ export const ancPriceQuery = async ( mantleEndpoint ) => {
       ANCPoolSize,
       USTPoolSize,
       LPShare,
-      ANCPrice: ANCPrice.toLowerCase() === 'nan' ? '0' : ANCPrice,
+      ANCPrice: ANCPrice.toLowerCase() === "nan" ? "0" : ANCPrice,
     },
   };
 };

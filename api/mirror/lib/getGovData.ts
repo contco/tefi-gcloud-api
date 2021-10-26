@@ -5,34 +5,43 @@ import { MIR } from "./utils";
 
 export const fetchGovBalance = async (address: string) => {
   try {
-    const { data } : any = await axios.get(LCD_URL + `wasm/contracts/${mirrorContracts.gov}/store`, {
+    const { data }: any = await axios.get(
+      LCD_URL + `wasm/contracts/${mirrorContracts.gov}/store`,
+      {
         params: {
           query_msg: JSON.stringify({
             staker: {
-                address
-            }
-          })
-       },
-    });
+              address,
+            },
+          }),
+        },
+      }
+    );
     return data?.result?.balance ?? "0";
-  }
-  catch(err){
-    return '0';
+  } catch (err) {
+    return "0";
   }
 };
 
 export const getGovData = (balance: string, statistic: any) => {
-  if(balance === "0") {
-      return null;
+  if (balance === "0") {
+    return null;
+  } else {
+    const price = statistic?.mirPrice ?? "0";
+    const govApr = statistic?.govAPR ?? "0";
+    const name = "MIR Gov";
+    const symbol = MIR;
+    const staked = (parseFloat(balance) / MICRO).toString();
+    const value = math.times(staked, price);
+    const apr = math.times(govApr, "100");
+    return {
+      name,
+      symbol,
+      staked,
+      value,
+      apr,
+      price,
+      rewards: "Automatically re-staked",
+    };
   }
-  else {
-      const price = statistic?.mirPrice ?? '0';
-      const govApr = statistic?.govAPR ?? '0';
-      const name = "MIR Gov"; 
-      const symbol = MIR;
-      const staked = (parseFloat(balance)/ MICRO).toString();
-      const value =  math.times(staked, price);
-      const apr = math.times(govApr, '100');
-      return {name, symbol, staked, value, apr, price, rewards: "Automatically re-staked"};
-  }
-}
+};

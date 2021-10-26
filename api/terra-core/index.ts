@@ -1,94 +1,96 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getTerraCoreAccount } from './lib/core';
-import { saveAddress } from '../commons';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
+import { getTerraCoreAccount } from "./lib/core";
+import { saveAddress } from "../commons";
 
 const typeDefs = gql`
-    type Coin {
-        name: String!
-        symbol: String!
-        balance: String
-        value: String
-        price: String
-        denom: String
-        contract: String
-    }
- 
-   type CoreTotal {
-       assetsSum: String
-       stakedSum: String
-       unstakedSum: String
-   }
-   
-   type LunaStaking {
-       balance: String
-       rewards: String
-       stakedValue: String
-       rewardsValue: String
-       totalValue: String
-       validator: String
-       state: String
-   }
+  type Coin {
+    name: String!
+    symbol: String!
+    balance: String
+    value: String
+    price: String
+    denom: String
+    contract: String
+  }
 
-    type Core {
-        coins: [Coin]
-        staking: [LunaStaking]
-        total: CoreTotal
-    }
+  type CoreTotal {
+    assetsSum: String
+    stakedSum: String
+    unstakedSum: String
+  }
 
-    type PoolTokens {
-        symbol1: String!
-        symbol2:String!
-        lpName: String!
-        price: String!
-        stakedLp: String!
-        stakedLpUstValue:String!
-        stakeableLp: String!
-        stakeableLpUstValue:String!
-        token1UnStaked:String!
-        token1Staked:String!
-        token2UnStaked:String!
-        token2Staked:String!
-        totalLpUstValue:String!
-    }
+  type LunaStaking {
+    balance: String
+    rewards: String
+    stakedValue: String
+    rewardsValue: String
+    totalValue: String
+    validator: String
+    state: String
+  }
 
-    type Pool {
-        list:[PoolTokens!]
-        total:String
-    }
+  type Core {
+    coins: [Coin]
+    staking: [LunaStaking]
+    total: CoreTotal
+  }
 
-    type Assets @key(fields: "address") {
-        address: String!
-        core: Core
-        holdings: Coin
-        terraSwapPool: Pool
-    }
-    
-    type Query {
-        assets(address: String!): Assets
-    }
+  type PoolTokens {
+    symbol1: String!
+    symbol2: String!
+    lpName: String!
+    price: String!
+    stakedLp: String!
+    stakedLpUstValue: String!
+    stakeableLp: String!
+    stakeableLpUstValue: String!
+    token1UnStaked: String!
+    token1Staked: String!
+    token2UnStaked: String!
+    token2Staked: String!
+    totalLpUstValue: String!
+  }
+
+  type Pool {
+    list: [PoolTokens!]
+    total: String
+  }
+
+  type Assets @key(fields: "address") {
+    address: String!
+    core: Core
+    holdings: Coin
+    terraSwapPool: Pool
+  }
+
+  type Query {
+    assets(address: String!): Assets
+  }
 `;
 
 const resolvers = {
-    Query: {
-        async assets(_, args) {
-            saveAddress(args.address);
-            return getTerraCoreAccount({ args })
-        },
+  Query: {
+    async assets(_, args) {
+      saveAddress(args.address);
+      return getTerraCoreAccount({ args });
     },
-    Assets: {
-        __resolveReference(assets) {
-            return getTerraCoreAccount({ args: { address: assets.address } })
-        }
-    }
+  },
+  Assets: {
+    __resolveReference(assets) {
+      return getTerraCoreAccount({ args: { address: assets.address } });
+    },
+  },
 };
 
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
 export const config = {
-    api: {
-        bodyParser: false,
-    },
-}
+  api: {
+    bodyParser: false,
+  },
+};
 
-export default apolloServer.createHandler()
+export default apolloServer.createHandler();

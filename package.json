@@ -4,6 +4,9 @@
   "main": "dist/index.js",
   "license": "MIT",
   "scripts": {
+    "format": "prettier --write .",
+    "lint": "eslint . --ext ts --ext tsx --ext js",
+    "prepare": "husky install",
     "build": "tsc --build",
     "deploy-gateway": " gcloud functions deploy tefi-graphql --entry-point tefiGraphqlGateway --runtime nodejs14 --trigger-http --allow-unauthenticated",
     "deploy-anc": "gcloud functions deploy anchor-graphql --entry-point anchorHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
@@ -18,6 +21,12 @@
     "deploy-altered": "gcloud functions deploy altered-graphql --entry-point alteredHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
     "deploy-tfloki": "gcloud functions deploy tfloki-graphql --entry-point tflokiHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
     "deploy-nexus": "gcloud functions deploy nexus-graphql --entry-point nexusHandler --runtime nodejs14 --trigger-http --allow-unauthenticated"
+  },
+  "lint-staged": {
+    "*.{ts,tsx}": [
+      "yarn lint",
+      "yarn format"
+    ]
   },
   "dependencies": {
     "@anchor-protocol/anchor.js": "^1.2.0",
@@ -39,6 +48,13 @@
   },
   "devDependencies": {
     "@types/big.js": "^6.1.2",
+    "@typescript-eslint/eslint-plugin": "^5.2.0",
+    "@typescript-eslint/parser": "^5.2.0",
+    "eslint": "^8.1.0",
+    "eslint-config-prettier": "^8.3.0",
+    "husky": "^7.0.4",
+    "lint-staged": "^11.2.4",
+    "prettier": "2.4.1",
     "typescript": "^4.4.4"
   }
 }

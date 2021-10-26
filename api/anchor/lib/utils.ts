@@ -1,5 +1,5 @@
-import axios from "axios"
-import fetch from 'node-fetch';
+import axios from "axios";
+import fetch from "node-fetch";
 
 import { MANTLE_URL } from "../../constants";
 
@@ -10,23 +10,25 @@ export const getLastSyncedHeight = async () => {
         LastSyncedHeight
       }
     `;
-    const payload = {query: LAST_SYNCED_HEIGHT_QUERY, variables: {} };
-    const {data}: any = await axios.post(MANTLE_URL + "?last-synced-height", payload);
+    const payload = { query: LAST_SYNCED_HEIGHT_QUERY, variables: {} };
+    const { data }: any = await axios.post(
+      MANTLE_URL + "?last-synced-height",
+      payload
+    );
     return data?.data?.LastSyncedHeight;
-  }
-  catch(err) {
+  } catch (err) {
     throw new Error("Error fetching last synced height");
   }
-}
+};
 
-export const mantleFetch : any = async (
+export const mantleFetch: any = async (
   query: string,
   variables: any,
   endpoint: string,
-  requestInit?: any,
+  requestInit?: any
 ) => {
-  const {data: result} = await axios.post(endpoint, {query, variables});
-  const {data, errors}: any = result;
+  const { data: result } = await axios.post(endpoint, { query, variables });
+  const { data, errors }: any = result;
   if (errors) {
     return errors[0].message;
   }
@@ -41,4 +43,3 @@ export const MICRO = 1000000;
 
 export const valueConversion = (value) =>
   (parseFloat(value) / MICRO).toFixed(3);
-	

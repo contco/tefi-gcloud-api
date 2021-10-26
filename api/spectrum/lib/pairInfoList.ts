@@ -542,5 +542,5 @@ export const pairInfoList = {
     ],
     contract_addr: "terra1etdkg9p0fkl8zal6ecp98kypd32q8k3ryced9d",
     liquidity_token: "terra1c9wr85y8p8989tr58flz5gjkqp8q2r6murwpm9",
-  }
+  },
 };

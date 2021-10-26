@@ -1,20 +1,20 @@
-type ShuttleNetwork = "ethereum" | "bsc"
+type ShuttleNetwork = "ethereum" | "bsc";
 
 interface NetworkInfo {
-    name: string;
-    chainID: string;
-    lcd: string;
+  name: string;
+  chainID: string;
+  lcd: string;
 }
 
 interface LocalNetworkConfig {
-    contract: string
-    mantle: string
-    stats: string
-    shuttle: Record<ShuttleNetwork, string>
-    fee: { gasPrice: number; amount: number }
-  }
-  
-type MirrorNetworkInfo = NetworkInfo & LocalNetworkConfig
+  contract: string;
+  mantle: string;
+  stats: string;
+  shuttle: Record<ShuttleNetwork, string>;
+  fee: { gasPrice: number; amount: number };
+}
+
+type MirrorNetworkInfo = NetworkInfo & LocalNetworkConfig;
 
 export const networks: Record<string, MirrorNetworkInfo> = {
   mainnet: {
@@ -56,5 +56,4 @@ export const networks: Record<string, MirrorNetworkInfo> = {
     },
     fee: { gasPrice: 0.15, amount: 150000 }, // 0.15 UST
   },
-}
-
+};

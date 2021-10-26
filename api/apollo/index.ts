@@ -1,6 +1,6 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getApolloDaoAccount } from './lib';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
+import { getApolloDaoAccount } from "./lib";
 
 const typeDefs = gql`
   type ApolloVaults {
@@ -32,13 +32,14 @@ const resolvers = {
   },
 };
 
-
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
 export const config = {
-    api: {
-        bodyParser: false,
-    },
-}
+  api: {
+    bodyParser: false,
+  },
+};
 
-export default apolloServer.createHandler()
+export default apolloServer.createHandler();

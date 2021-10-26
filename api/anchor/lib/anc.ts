@@ -1,17 +1,17 @@
-import { anchor, ContractAddresses } from './test-defaults';
-import getDebt from './borrow';
-import getEarn from './earn';
-import { getAncPoolData } from './lp';
-import getGov from './gov';
-import getBurn from './burn';
-import { formatAirdrops, getAirdrops } from './airdrop';
+import { anchor, ContractAddresses } from "./test-defaults";
+import getDebt from "./borrow";
+import getEarn from "./earn";
+import { getAncPoolData } from "./lp";
+import getGov from "./gov";
+import getBurn from "./burn";
+import { formatAirdrops, getAirdrops } from "./airdrop";
 
 const fetchBalance = async (address: string) => {
   try {
     const balance = await anchor.anchorToken.getBalance(address);
     return balance;
   } catch (err) {
-    return '0';
+    return "0";
   }
 };
 
@@ -20,7 +20,7 @@ const fetchPrice = async () => {
     const price = anchor.anchorToken.getANCPrice();
     return price;
   } catch (err) {
-    return '0';
+    return "0";
   }
 };
 
@@ -28,11 +28,18 @@ const getAnchorHoldings = (balance: number, price: number) => {
   if (balance) {
     const value = (balance * price).toString();
     const anchorHoldings = [
-      { symbol: 'ANC', name: 'Anchor', contract: ContractAddresses.cw20, balance: balance.toString(), value, price: price.toString() },
+      {
+        symbol: "ANC",
+        name: "Anchor",
+        contract: ContractAddresses.cw20,
+        balance: balance.toString(),
+        value,
+        price: price.toString(),
+      },
     ];
     return { anchorHoldings, anchorHoldingsSum: value };
   }
-  return { anchorHoldings: [], anchorHoldingsSum: '0' };
+  return { anchorHoldings: [], anchorHoldingsSum: "0" };
 };
 
 export const getAnchorAccount = async (address: any) => {
@@ -61,14 +68,19 @@ export const getAnchorAccount = async (address: any) => {
 
   const { poolData, anchorPoolSum, anchorRewardsSum } = pool;
 
-  const { anchorHoldings, anchorHoldingsSum } = getAnchorHoldings(parseFloat(balance), parseFloat(price));
+  const { anchorHoldings, anchorHoldingsSum } = getAnchorHoldings(
+    parseFloat(balance),
+    parseFloat(price)
+  );
 
   let reward = 0;
 
-  if (debt.reward.reward === '<0.001') {
+  if (debt.reward.reward === "<0.001") {
     reward = parseFloat(anchorRewardsSum);
   } else {
-    reward = parseFloat(debt.reward.reward) * parseFloat(price) + parseFloat(anchorRewardsSum);
+    reward =
+      parseFloat(debt.reward.reward) * parseFloat(price) +
+      parseFloat(anchorRewardsSum);
   }
 
   const result = {

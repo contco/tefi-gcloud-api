@@ -1,19 +1,29 @@
 schema
-  @core(feature: "https://specs.apollo.dev/core/v0.2"),
-  @core(feature: "https://specs.apollo.dev/join/v0.1", for: EXECUTION)
-{
+  @core(feature: "https://specs.apollo.dev/core/v0.2")
+  @core(feature: "https://specs.apollo.dev/join/v0.1", for: EXECUTION) {
   query: Query
 }
 
-directive @core(as: String, feature: String!, for: core__Purpose) repeatable on SCHEMA
+directive @core(
+  as: String
+  feature: String!
+  for: core__Purpose
+) repeatable on SCHEMA
 
-directive @join__field(graph: join__Graph, provides: join__FieldSet, requires: join__FieldSet) on FIELD_DEFINITION
+directive @join__field(
+  graph: join__Graph
+  provides: join__FieldSet
+  requires: join__FieldSet
+) on FIELD_DEFINITION
 
 directive @join__graph(name: String!, url: String!) on ENUM_VALUE
 
 directive @join__owner(graph: join__Graph!) on INTERFACE | OBJECT
 
-directive @join__type(graph: join__Graph!, key: join__FieldSet) repeatable on INTERFACE | OBJECT
+directive @join__type(
+  graph: join__Graph!
+  key: join__FieldSet
+) repeatable on INTERFACE | OBJECT
 
 type Account {
   airdrops: [Airdrops!]
@@ -111,8 +121,7 @@ type Assets
   @join__type(graph: SPECTRUM, key: "address")
   @join__type(graph: STARTERRA, key: "address")
   @join__type(graph: TERRAWORLD, key: "address")
-  @join__type(graph: TFLOKI, key: "address")
-{
+  @join__type(graph: TFLOKI, key: "address") {
   address: String! @join__field(graph: TERRACORE)
   altered: AlteredAccount @join__field(graph: ALTERED)
   anchor: AccountANC @join__field(graph: ANCHOR)
@@ -713,16 +722,64 @@ enum core__Purpose {
 scalar join__FieldSet
 
 enum join__Graph {
-  ALTERED @join__graph(name: "altered" url: "http://us-central1-tefiserver.cloudfunctions.net/altered-graphql")
-  ANCHOR @join__graph(name: "anchor" url: "https://us-central1-tefiserver.cloudfunctions.net/anchor-graphql")
-  APOLLO @join__graph(name: "apollo" url: "http://us-central1-tefiserver.cloudfunctions.net/apollo-graphql")
-  LOTERRA @join__graph(name: "loterra" url: "http://us-central1-tefiserver.cloudfunctions.net/loterra-graphql")
-  MIRROR @join__graph(name: "mirror" url: "http://us-central1-tefiserver.cloudfunctions.net/mirror-graphql")
-  NEXUS @join__graph(name: "nexus" url: "http://us-central1-tefiserver.cloudfunctions.net/nexus-graphql")
-  PYLON @join__graph(name: "pylon" url: "https://us-central1-tefiserver.cloudfunctions.net/pylon-graphql")
-  SPECTRUM @join__graph(name: "spectrum" url: "https://us-central1-tefiserver.cloudfunctions.net/spectrum-graphql")
-  STARTERRA @join__graph(name: "starterra" url: "http://us-central1-tefiserver.cloudfunctions.net/starterra-graphql")
-  TERRACORE @join__graph(name: "terraCore" url: "https://us-central1-tefiserver.cloudfunctions.net/terraCore-graphql")
-  TERRAWORLD @join__graph(name: "terraworld" url: "http://us-central1-tefiserver.cloudfunctions.net/terraworld-graphql")
-  TFLOKI @join__graph(name: "tfloki" url: "http://us-central1-tefiserver.cloudfunctions.net/tfloki-graphql")
+  ALTERED
+    @join__graph(
+      name: "altered"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/altered-graphql"
+    )
+  ANCHOR
+    @join__graph(
+      name: "anchor"
+      url: "https://us-central1-tefiserver.cloudfunctions.net/anchor-graphql"
+    )
+  APOLLO
+    @join__graph(
+      name: "apollo"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/apollo-graphql"
+    )
+  LOTERRA
+    @join__graph(
+      name: "loterra"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/loterra-graphql"
+    )
+  MIRROR
+    @join__graph(
+      name: "mirror"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/mirror-graphql"
+    )
+  NEXUS
+    @join__graph(
+      name: "nexus"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/nexus-graphql"
+    )
+  PYLON
+    @join__graph(
+      name: "pylon"
+      url: "https://us-central1-tefiserver.cloudfunctions.net/pylon-graphql"
+    )
+  SPECTRUM
+    @join__graph(
+      name: "spectrum"
+      url: "https://us-central1-tefiserver.cloudfunctions.net/spectrum-graphql"
+    )
+  STARTERRA
+    @join__graph(
+      name: "starterra"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/starterra-graphql"
+    )
+  TERRACORE
+    @join__graph(
+      name: "terraCore"
+      url: "https://us-central1-tefiserver.cloudfunctions.net/terraCore-graphql"
+    )
+  TERRAWORLD
+    @join__graph(
+      name: "terraworld"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/terraworld-graphql"
+    )
+  TFLOKI
+    @join__graph(
+      name: "tfloki"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/tfloki-graphql"
+    )
 }

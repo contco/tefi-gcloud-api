@@ -1,6 +1,6 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getAlteredAccount } from './lib';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
+import { getAlteredAccount } from "./lib";
 
 const typeDefs = gql`
   type AltePool {
@@ -42,6 +42,8 @@ const resolvers = {
   },
 };
 
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
 export default apolloServer.createHandler();

@@ -1,9 +1,9 @@
-import { ContractAddresses } from './test-defaults';
-import { mantleFetch } from './utils';
-import { formatRate } from './utils';
-import { ancPriceQuery } from './ancPrice';
-import { getAnchorApyStats } from './getAncApyStats';
-import { MANTLE_URL } from '../../constants';
+import { ContractAddresses } from "./test-defaults";
+import { mantleFetch } from "./utils";
+import { formatRate } from "./utils";
+import { ancPriceQuery } from "./ancPrice";
+import { getAnchorApyStats } from "./getAncApyStats";
+import { MANTLE_URL } from "../../constants";
 
 export const REWARDS_ANC_GOVERNANCE_REWARDS_QUERY = `
   query (
@@ -21,12 +21,15 @@ export const REWARDS_ANC_GOVERNANCE_REWARDS_QUERY = `
   }
 `;
 
-export const rewardsAncGovernanceRewardsQuery = async (mantleEndpoint, address) => {
+export const rewardsAncGovernanceRewardsQuery = async (
+  mantleEndpoint,
+  address
+) => {
   const rawData = await mantleFetch(
     REWARDS_ANC_GOVERNANCE_REWARDS_QUERY,
     {
-      govContract: ContractAddresses['gov'],
-      ancContract: ContractAddresses['cw20'],
+      govContract: ContractAddresses["gov"],
+      ancContract: ContractAddresses["cw20"],
       govStakeInfoQuery: JSON.stringify({
         staker: {
           address: address,
@@ -38,7 +41,7 @@ export const rewardsAncGovernanceRewardsQuery = async (mantleEndpoint, address) 
         },
       }),
     },
-    `${mantleEndpoint}?rewards--anc-governance-rewards`,
+    `${mantleEndpoint}?rewards--anc-governance-rewards`
   );
 
   return {
@@ -49,17 +52,22 @@ export const rewardsAncGovernanceRewardsQuery = async (mantleEndpoint, address) 
 
 export default async (address) => {
   try {
-    const [govInfo, apyStats, ancData] = await Promise.all([rewardsAncGovernanceRewardsQuery(MANTLE_URL, address), getAnchorApyStats(), ancPriceQuery(MANTLE_URL)]);
-    if(govInfo?.userGovStakingInfo?.balance !== "0") {
+    const [govInfo, apyStats, ancData] = await Promise.all([
+      rewardsAncGovernanceRewardsQuery(MANTLE_URL, address),
+      getAnchorApyStats(),
+      ancPriceQuery(MANTLE_URL),
+    ]);
+    if (govInfo?.userGovStakingInfo?.balance !== "0") {
       const staked =
         parseFloat(govInfo?.userGovStakingInfo?.balance) > 0
-        ? parseFloat(govInfo?.userGovStakingInfo?.balance)/1000000
-        : null;
-    
-      const stakedValue = parseFloat(staked.toString()) * parseFloat(ancData?.ancPrice?.ANCPrice);
+          ? parseFloat(govInfo?.userGovStakingInfo?.balance) / 1000000
+          : null;
+
+      const stakedValue =
+        parseFloat(staked.toString()) * parseFloat(ancData?.ancPrice?.ANCPrice);
 
       const result = {
-        name: 'ANC Gov',
+        name: "ANC Gov",
         symbol: "ANC",
         staked: staked.toString(),
         apr: formatRate(apyStats?.govRewardApy),
@@ -69,9 +77,8 @@ export default async (address) => {
       };
       return result;
     }
-      return null;
-  }
-  catch(err){
+    return null;
+  } catch (err) {
     return null;
   }
 };

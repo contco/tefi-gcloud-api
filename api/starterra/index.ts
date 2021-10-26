@@ -1,6 +1,6 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getStarTerraAccount } from './lib/account';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
+import { getStarTerraAccount } from "./lib/account";
 
 const typeDefs = gql`
   type StarStakedData {
@@ -67,12 +67,14 @@ const resolvers = {
   },
 };
 
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
 export const config = {
-    api: {
-        bodyParser: false,
-    },
-}
+  api: {
+    bodyParser: false,
+  },
+};
 
-export default apolloServer.createHandler()
+export default apolloServer.createHandler();

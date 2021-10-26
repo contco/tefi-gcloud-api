@@ -1,6 +1,6 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getAnchorAccount } from './lib/anc';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
+import { getAnchorAccount } from "./lib/anc";
 
 const typeDefs = gql`
   type Token {
@@ -107,9 +107,9 @@ const typeDefs = gql`
   type BurnData {
     requestData: [RequestData]
     withdrawableAmount: String
-		withdrawableValue: String
-		totalBurnAmount: String
-		totalBurnAmountValue: String
+    withdrawableValue: String
+    totalBurnAmount: String
+    totalBurnAmountValue: String
   }
 
   type AccountANC {
@@ -138,6 +138,8 @@ const resolvers = {
   },
 };
 
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
 export default apolloServer.createHandler();

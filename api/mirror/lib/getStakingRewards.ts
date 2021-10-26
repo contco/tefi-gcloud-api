@@ -1,8 +1,8 @@
-import { request, gql } from 'graphql-request';
-import { networks } from '@contco/terra-utilities';
-import { parseContractsData, STAKING_CONTRACT } from './utils';
+import { request, gql } from "graphql-request";
+import { networks } from "@contco/terra-utilities";
+import { parseContractsData, STAKING_CONTRACT } from "./utils";
 
-const STAKING_CONTRACT_NAME = 'StakingReward';
+const STAKING_CONTRACT_NAME = "StakingReward";
 
 const GET_CONTRACT = (name: string) => gql`
 query ${name} ($contract: String, $msg: String) {
@@ -16,15 +16,23 @@ query ${name} ($contract: String, $msg: String) {
 }
 `;
 
-export const getStakingRewards = async (address: string): Promise<StakingReward> => {
+export const getStakingRewards = async (
+  address: string
+): Promise<StakingReward> => {
   try {
-  const variables = { contract: STAKING_CONTRACT, msg: JSON.stringify({ reward_info: { staker_addr: address } }) };
-  const contractQuery = GET_CONTRACT(STAKING_CONTRACT_NAME);
-  const result = await request(networks.mainnet.mantle, contractQuery, variables);
-  const parsedData: StakingReward = parseContractsData(result);
-  return parsedData;
-  }
-  catch(err){
+    const variables = {
+      contract: STAKING_CONTRACT,
+      msg: JSON.stringify({ reward_info: { staker_addr: address } }),
+    };
+    const contractQuery = GET_CONTRACT(STAKING_CONTRACT_NAME);
+    const result = await request(
+      networks.mainnet.mantle,
+      contractQuery,
+      variables
+    );
+    const parsedData: StakingReward = parseContractsData(result);
+    return parsedData;
+  } catch (err) {
     return null;
   }
 };

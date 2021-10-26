@@ -1,6 +1,6 @@
-import { ApolloServer, gql } from 'apollo-server-cloud-functions';
-import { buildSubgraphSchema } from '@apollo/subgraph';
-import { getLoterraAccount } from './lib';
+import { ApolloServer, gql } from "apollo-server-cloud-functions";
+import { buildSubgraphSchema } from "@apollo/subgraph";
+import { getLoterraAccount } from "./lib";
 
 const typeDefs = gql`
   type SpecGov {
@@ -52,7 +52,6 @@ const typeDefs = gql`
     rewardsSymbol: String!
     apy: String!
   }
- 
 
   type LoterraAccount {
     loterraDraw: LoterraDraw
@@ -74,12 +73,14 @@ const resolvers = {
   },
 };
 
-const apolloServer = new ApolloServer({ schema: buildSubgraphSchema([{ typeDefs, resolvers }]) });
+const apolloServer = new ApolloServer({
+  schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
+});
 
 export const config = {
-    api: {
-        bodyParser: false,
-    },
-}
+  api: {
+    bodyParser: false,
+  },
+};
 
-export default apolloServer.createHandler()
+export default apolloServer.createHandler();
