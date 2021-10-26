@@ -31,11 +31,25 @@ export const getTerraWorldAssets = async (address: string) => {
       contracts.twdPoolStakingContract,
       stakerInfo
     );
+    const stakingStateRequest = wasmStoreRequest(
+      contracts.twdPoolStakingContract,
+      { state: {} }
+    );
+    const stakingConfigRequest = wasmStoreRequest(
+      contracts.twdPoolStakingContract,
+      { config: {} }
+    );
     const poolLpRequest = wasmStoreRequest(contracts.staking, balanceMsg);
     const stakingGovRequest = wasmStoreRequest(
       contracts.twdGovStakingContract,
       stakerInfo
     );
+    const govStateRequest = wasmStoreRequest(contracts.twdGovStakingContract, {
+      state: {},
+    });
+    const govConfigRequest = wasmStoreRequest(contracts.twdGovStakingContract, {
+      config: {},
+    });
     const twdHoldingsRequest = wasmStoreRequest(contracts.token, balanceMsg);
 
     const [
@@ -44,15 +58,36 @@ export const getTerraWorldAssets = async (address: string) => {
       stakingGovInfo,
       poolLpBalance,
       twdHoldingsInfo,
+      stakingLpState,
+      stakingLpConfig,
+      govState,
+      govConfig,
     ] = await Promise.all([
       poolInfoRequest,
       stakingLpRequest,
       stakingGovRequest,
       poolLpRequest,
       twdHoldingsRequest,
+      stakingStateRequest,
+      stakingConfigRequest,
+      govStateRequest,
+      govConfigRequest,
     ]);
-    const twdPool = getLpStakingInfo(poolInfo, stakingLpInfo, poolLpBalance);
-    const twdGov = getGovInfo(poolInfo, stakingGovInfo);
+    const twdPool = getLpStakingInfo(
+      poolInfo,
+      stakingLpInfo,
+      poolLpBalance,
+      stakingLpState,
+      stakingLpConfig,
+      blockHeight
+    );
+    const twdGov = getGovInfo(
+      poolInfo,
+      stakingGovInfo,
+      govState,
+      govConfig,
+      blockHeight
+    );
     const twdHoldings = getWalletHoldings(poolInfo, twdHoldingsInfo);
     return { twdHoldings, twdPool, twdGov };
   } catch (err) {

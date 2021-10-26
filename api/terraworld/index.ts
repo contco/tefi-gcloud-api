@@ -19,7 +19,7 @@ const typeDefs = gql`
     value: String!
     rewards: String!
     rewardsValue: String!
-    apr: String!
+    apy: String!
     price: String!
   }
 

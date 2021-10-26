@@ -1,11 +1,19 @@
 import { getPrice, getLpValue, MICRO, math } from "@contco/terra-utilities";
 import { getPoolValues } from "./getPoolValues";
+import { getTwdLpApr } from "./calculateApr";
 
 const LP_NAME = "TWD-UST";
 const SYMBOL1 = "UST";
 const SYMBOL2 = "TWD";
 
-export const getLpStakingInfo = (poolInfo, stakedLpInfo, LpTokenInfo) => {
+export const getLpStakingInfo = (
+  poolInfo,
+  stakedLpInfo,
+  LpTokenInfo,
+  stakingState,
+  stakingConfig,
+  blockHeight: number
+) => {
   if (stakedLpInfo?.bond_amount === "0" && LpTokenInfo?.balance === "0") {
     return null;
   }
@@ -22,7 +30,13 @@ export const getLpStakingInfo = (poolInfo, stakedLpInfo, LpTokenInfo) => {
   const rewards = (stakedLpInfo?.pending_reward / MICRO).toString();
   const rewardsValue = math.times(rewards, price);
   const rewardsSymbol = SYMBOL2;
-  const apr = "0";
+  const apr = getTwdLpApr(
+    blockHeight,
+    poolInfo,
+    stakingState,
+    stakingConfig,
+    price
+  );
   return {
     symbol1: SYMBOL1,
     symbol2: SYMBOL2,
