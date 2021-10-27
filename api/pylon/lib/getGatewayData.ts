@@ -6,7 +6,7 @@ import {
   math,
 } from "@contco/terra-utilities";
 import { fetchData } from "../../commons";
-import { PYLON_API_ENDPOINT } from "./constants";
+import { poolContracts, PYLON_API_ENDPOINT } from "./constants";
 import { contracts as terraworldContracts } from "../../terraworld/lib/contracts";
 
 const getTokenPrice = async (symbol) => {
@@ -15,19 +15,31 @@ const getTokenPrice = async (symbol) => {
     PYLON_API_ENDPOINT + "mine/v1/overview"
   );
   const poolInfoTWDReuest = getPoolInfo(terraworldContracts.pool);
-  const [mineOverview, poolInfoTWD]: any = await Promise.all([
-    mineOverviewRequest,
-    poolInfoTWDReuest,
-  ]);
+  const poolInfoLoopRequest = getPoolInfo(poolContracts.loop);
+  const poolInfoVkrRequest = getPoolInfo(poolContracts.vkr);
+  const [mineOverview, poolInfoTWD, poolInfoLoop, poolInfoVkr]: any =
+    await Promise.all([
+      mineOverviewRequest,
+      poolInfoTWDReuest,
+      poolInfoLoopRequest,
+      poolInfoVkrRequest,
+    ]);
   const minePrice = mineOverview.data.priceInUst;
   const twdPrice = getPrice(poolInfoTWD).toString();
-  const loopPrice = "0.035";
+  const loopPrice = getPrice(poolInfoLoop).toString();
+  const vkrPrice = getPrice(poolInfoVkr).toString();
   if (symbol === "MINE") {
     price = minePrice;
   } else if (symbol === "LOOP") {
     price = loopPrice;
-  } else {
+  } else if (symbol === "TWD") {
     price = twdPrice;
+  } else if (symbol === "VKR") {
+    price = vkrPrice;
+  } else {
+    console.log(
+      `${symbol} symbol doest not match for price set in pylon gateway`
+    );
   }
   return price;
 };
