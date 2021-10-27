@@ -5,6 +5,7 @@ import {
   MICRO,
 } from "@contco/terra-utilities";
 import { NEXUS_CONTRACTS } from "./contracts";
+import { calculateApr } from "./calculateApr";
 
 const SYMBOL1 = "UST";
 const SYMBOL2 = "PSI";
@@ -23,10 +24,24 @@ export const fetchStakedLp = (address: string) => {
   return result;
 };
 
+export const fetchStakingState = () => {
+  const query_msg = { state: {} };
+  const result = wasmStoreRequest(NEXUS_CONTRACTS.staking, query_msg);
+  return result;
+};
+
+export const fetchStakingConfig = () => {
+  const query_msg = { config: {} };
+  const result = wasmStoreRequest(NEXUS_CONTRACTS.staking, query_msg);
+  return result;
+};
+
 export const getNexusPool = (
   availableLpInfo: any,
   stakedLpInfo: any,
   poolInfo: any,
+  stakingState: any,
+  stakingConfig: any,
   nexusPrice: string
 ) => {
   if (availableLpInfo?.balance !== "0" || stakedLpInfo?.bond_amount !== "0") {
@@ -46,7 +61,7 @@ export const getNexusPool = (
     const rewardsValue = math.times(rewards, nexusPrice);
     const rewardsSymbol = SYMBOL2;
     const totalLpUstValue = stakedLpUstValue + stakeableLpUstValue;
-    const apr = "0";
+    const apr = calculateApr(poolInfo, stakingState, stakingConfig, nexusPrice);
     return {
       symbol1: SYMBOL1,
       symbol2: SYMBOL2,
