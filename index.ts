@@ -10,6 +10,7 @@ import loterraHandler from "./api/loterra";
 import alteredHandler from "./api/altered";
 import tflokiHandler from "./api/tfloki";
 import nexusHandler from "./api/nexus";
+import valkyrieHandler from "./api/valkyrie";
 
 export {
   terraCoreHandler,
@@ -24,4 +25,5 @@ export {
   alteredHandler,
   tflokiHandler,
   nexusHandler,
+  valkyrieHandler,
 };
