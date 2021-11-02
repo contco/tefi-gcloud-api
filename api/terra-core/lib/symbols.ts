@@ -128,20 +128,12 @@ export const SWAP_TOKENS = [
     pool_addr: "terra1fmv3g96s4xc9nrnlkdn87vxyaydd22xsxzel5r",
   },
   {
-    name: "Terra Moon",
-    symbol: "SDOLLAR",
-    isNative: false,
-    isLunaPair: false,
-    token_addr: "terra1spqqmg4flglq6hv4cwayqytam3wdsjeasd84qv",
-    pool_addr: "terra1hmxxq0y8h79f3228vs0czc4uz5jdgjt0appp26",
-  },
-  {
     name: "TerraKub",
     symbol: "TKUB",
     isNative: false,
     isLunaPair: false,
-    token_addr: "terra1f9aln0c98j9w749szx958la7x25chdnz9hqx0v",
-    pool_addr: "terra1sn208s2cmya87707w4r9hf36znv8ml8dcnhr2d",
+    token_addr: "terra1sn208s2cmya87707w4r9hf36znv8ml8dcnhr2d",
+    pool_addr: "terra1f9aln0c98j9w749szx958la7x25chdnz9hqx0v",
   },
   {
     name: "Juta Club Token",
