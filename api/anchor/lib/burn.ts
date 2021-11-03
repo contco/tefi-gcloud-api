@@ -1,7 +1,7 @@
 /* eslint-disable no-useless-escape */
 import axios from "axios";
-import { fetchData, date } from "../../commons";
-import { MICRO, getPrice } from "@contco/terra-utilities";
+import { fetchData, date, getPriceFromFCD } from "../../commons";
+import { MICRO } from "@contco/terra-utilities";
 import { MANTLE_URL, LUNA_DENOM, BASSETS_INFO } from "../../constants";
 
 const WITHDRAWABLE_REQUEST_QUERY = (address, blockTime) =>
@@ -71,6 +71,7 @@ export const getWithdrawableRequest = async (address: string) => {
     const requests = JSON.parse(
       withdrawables.data?.data?.unbondedRequests.Result
     ).requests;
+
     let requestHistories: any = [];
     if (requests.length > 0) {
       requestHistories = await Promise.all(
@@ -95,7 +96,7 @@ export const getWithdrawableRequest = async (address: string) => {
       );
     }
 
-    const lunaPrice = await getPrice(LUNA_DENOM);
+    const lunaPrice = await getPriceFromFCD(LUNA_DENOM);
     const withdrawableAmount = JSON.parse(
       withdrawables?.data?.data.withdrawableUnbonded?.Result
     )?.withdrawable;
