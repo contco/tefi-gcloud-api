@@ -8,6 +8,7 @@ import {
   getNexusPool,
 } from "./lp";
 import { NEXUS_CONTRACTS } from "./contracts";
+import { fetchVaultData } from "./vault";
 
 const fetchData = (address: string) => {
   const result = Promise.all([
@@ -17,6 +18,7 @@ const fetchData = (address: string) => {
     fetchStakedLp(address),
     fetchStakingState(),
     fetchStakingConfig(),
+    fetchVaultData(address),
   ]);
   return result;
 };
@@ -29,6 +31,7 @@ export const getNexusAccount = async (address: string) => {
     stakedLp,
     stakingState,
     stakingConfig,
+    vaultData,
   ] = await fetchData(address);
   const nexusPrice = getPrice(poolInfo);
   const nexusHoldings = getHoldings(holdingsInfo, nexusPrice);
@@ -40,7 +43,7 @@ export const getNexusAccount = async (address: string) => {
     stakingConfig,
     nexusPrice
   );
-  const nexusAccount = { nexusHoldings, nexusPool };
+  const nexusAccount = { nexusHoldings, nexusPool, vaultData };
 
   return nexusAccount;
 };

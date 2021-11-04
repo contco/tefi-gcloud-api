@@ -32,9 +32,19 @@ const typeDefs = gql`
     apr: String!
   }
 
+  type NexusVault {
+    bLunaDeposit: String!
+    bEthDeposit: String!
+    bLunaRewards: String!
+    bEthRewards: String!
+    bLunaVaultApr: String!
+    bEthVaultApr: String!
+  }
+
   type NexusAccount {
     nexusHoldings: NexusHolding
     nexusPool: NexusPool
+    nexusVault: NexusVault
   }
 
   extend type Assets @key(fields: "address") {
@@ -50,6 +60,10 @@ const resolvers = {
     },
   },
 };
+
+getNexusAccount("terra18jg24fpqvjntm2wfc0p47skqccdr9ldtgl5ac9").then((data) => {
+  console.log(data);
+});
 
 const apolloServer = new ApolloServer({
   schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
