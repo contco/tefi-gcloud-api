@@ -61,10 +61,6 @@ const resolvers = {
   },
 };
 
-getNexusAccount("terra18jg24fpqvjntm2wfc0p47skqccdr9ldtgl5ac9").then((data) => {
-  console.log(data);
-});
-
 const apolloServer = new ApolloServer({
   schema: buildSubgraphSchema([{ typeDefs, resolvers }]),
 });
