@@ -92,7 +92,7 @@ export const SWAP_TOKENS = [
     symbol: "MIAW",
     isNative: false,
     isLunaPair: false,
-    token_addr: "terra14f7u8z4eqpxcrp4xr6knhgfp5n4h68nwy3yzg5",
+    token_addr: "terra1vtr50tw0pgqpes34zqu60n554p9x4950wk8f63",
     pool_addr: "terra12mzh5cp6tgc65t2cqku5zvkjj8xjtuv5v9whyd",
   },
   {
