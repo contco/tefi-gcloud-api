@@ -1,6 +1,8 @@
 import { wasmStoreRequest, math, MICRO } from "@contco/terra-utilities";
 import { NEXUS_CONTRACTS } from "./contracts";
 import axios from "axios";
+import { BASSETS_INFO } from "../../constants";
+import { fetchData } from "../../commons";
 
 const NEXUS_API = "https://api.nexusprotocol.app/graphql";
 
@@ -59,9 +61,21 @@ export const fetchVaultData = async (address: string) => {
   const bLunaVaultApr = aprRecords?.bLunaVaultApr;
   const bEthVaultApr = aprRecords?.bEthVaultApr;
 
+  const bEthRequest: any = await fetchData(BASSETS_INFO + "beth");
+  const bEthPrice = bEthRequest?.data?.beth_price;
+
+  const bLUNARequest: any = await fetchData(BASSETS_INFO + "bluna");
+  const bLUNAPrice: any = bLUNARequest?.data?.bLuna_price;
+
   return {
     bLunaDeposit,
+    bLunaDepositValue: (
+      parseFloat(bLunaDeposit) * parseFloat(bLUNAPrice)
+    ).toString(),
     bEthDeposit,
+    bEthDepositValue: (
+      parseFloat(bEthDeposit) * parseFloat(bEthPrice)
+    ).toString(),
     bLunaRewards,
     bEthRewards,
     bLunaVaultApr,

@@ -34,7 +34,9 @@ const typeDefs = gql`
 
   type NexusVault {
     bLunaDeposit: String!
+    bLunaDepositValue: String!
     bEthDeposit: String!
+    bEthDepositValue: String!
     bLunaRewards: String!
     bEthRewards: String!
     bLunaVaultApr: String!
