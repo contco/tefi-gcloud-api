@@ -373,7 +373,7 @@ type MirrorTotal {
 type NexusAccount {
   nexusHoldings: NexusHolding
   nexusPool: NexusPool
-  NexusVault: NexusVault
+  nexusVault: NexusVault
 }
 
 type NexusHolding {
