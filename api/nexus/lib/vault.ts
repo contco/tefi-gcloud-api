@@ -40,45 +40,49 @@ const fetchAprRecords = async () => {
 };
 
 export const fetchVaultData = async (address: string) => {
-  const bLunaDeposit = await fetchBalances(
-    NEXUS_CONTRACTS["bLunaVault"],
-    address
-  );
+  try {
+    const [bLunaDeposit, bEthDeposit, bLunaRewards, bEthRewards, aprRecords] =
+      await Promise.all([
+        fetchBalances(NEXUS_CONTRACTS["bLunaVault"], address),
+        fetchBalances(NEXUS_CONTRACTS["bEthVault"], address),
+        fetchRewards(NEXUS_CONTRACTS["bLunaRewards"], address),
+        fetchRewards(NEXUS_CONTRACTS["bEthRewards"], address),
+        fetchAprRecords(),
+      ]);
 
-  const bEthDeposit = await fetchBalances(
-    NEXUS_CONTRACTS["bEthVault"],
-    address
-  );
-  const bLunaRewards = await fetchRewards(
-    NEXUS_CONTRACTS["bLunaRewards"],
-    address
-  );
-  const bEthRewards = await fetchRewards(
-    NEXUS_CONTRACTS["bEthRewards"],
-    address
-  );
-  const aprRecords = await fetchAprRecords();
-  const bLunaVaultApr = aprRecords?.bLunaVaultApr;
-  const bEthVaultApr = aprRecords?.bEthVaultApr;
+    const bLunaVaultApr = aprRecords?.bLunaVaultApr;
+    const bEthVaultApr = aprRecords?.bEthVaultApr;
 
-  const bEthRequest: any = await fetchData(BASSETS_INFO + "beth");
-  const bEthPrice = bEthRequest?.data?.beth_price;
+    const bEthRequest: any = await fetchData(BASSETS_INFO + "beth");
+    const bEthPrice = bEthRequest?.data?.beth_price;
 
-  const bLUNARequest: any = await fetchData(BASSETS_INFO + "bluna");
-  const bLUNAPrice: any = bLUNARequest?.data?.bLuna_price;
+    const bLUNARequest: any = await fetchData(BASSETS_INFO + "bluna");
+    const bLUNAPrice = bLUNARequest?.data?.bLuna_price;
 
-  return {
-    bLunaDeposit,
-    bLunaDepositValue: (
-      parseFloat(bLunaDeposit) * parseFloat(bLUNAPrice)
-    ).toString(),
-    bEthDeposit,
-    bEthDepositValue: (
-      parseFloat(bEthDeposit) * parseFloat(bEthPrice)
-    ).toString(),
-    bLunaRewards,
-    bEthRewards,
-    bLunaVaultApr,
-    bEthVaultApr,
-  };
+    return {
+      bLunaDeposit,
+      bLunaDepositValue: (
+        parseFloat(bLunaDeposit) * parseFloat(bLUNAPrice)
+      ).toString(),
+      bEthDeposit,
+      bEthDepositValue: (
+        parseFloat(bEthDeposit) * parseFloat(bEthPrice)
+      ).toString(),
+      bLunaRewards,
+      bEthRewards,
+      bLunaVaultApr,
+      bEthVaultApr,
+    };
+  } catch (err) {
+    return {
+      bLunaDeposit: "0",
+      bLunaDepositValue: "0",
+      bEthDeposit: "0",
+      bEthDepositValue: "0",
+      bLunaRewards: "0",
+      bEthRewards: "0",
+      bLunaVaultApr: "0",
+      bEthVaultApr: "0",
+    };
+  }
 };
