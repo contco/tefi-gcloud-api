@@ -31,7 +31,7 @@ export const getNexusAccount = async (address: string) => {
     stakedLp,
     stakingState,
     stakingConfig,
-    vaultData,
+    nexusVault,
   ] = await fetchData(address);
   const nexusPrice = getPrice(poolInfo);
   const nexusHoldings = getHoldings(holdingsInfo, nexusPrice);
@@ -43,7 +43,7 @@ export const getNexusAccount = async (address: string) => {
     stakingConfig,
     nexusPrice
   );
-  const nexusAccount = { nexusHoldings, nexusPool, vaultData };
+  const nexusAccount = { nexusHoldings, nexusPool, nexusVault };
 
   return nexusAccount;
 };
