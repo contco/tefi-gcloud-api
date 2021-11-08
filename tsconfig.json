@@ -18,5 +18,5 @@
   },
   "lib": ["es2015"],
   "include": ["api", "**/*.ts", "index.ts"],
-  "exclude": ["node_modules", "gateway"]
+  "exclude": ["node_modules", "tefi-gateway"]
 }

@@ -8,6 +8,7 @@ import {
 import { fetchData } from "../../commons";
 import { poolContracts, PYLON_API_ENDPOINT } from "./constants";
 import { contracts as terraworldContracts } from "../../terraworld/lib/contracts";
+import { NEXUS_CONTRACTS } from "../../nexus/lib/contracts";
 
 const getTokenPrice = async (symbol) => {
   let price;
@@ -17,17 +18,25 @@ const getTokenPrice = async (symbol) => {
   const poolInfoTWDReuest = getPoolInfo(terraworldContracts.pool);
   const poolInfoLoopRequest = getPoolInfo(poolContracts.loop);
   const poolInfoVkrRequest = getPoolInfo(poolContracts.vkr);
-  const [mineOverview, poolInfoTWD, poolInfoLoop, poolInfoVkr]: any =
-    await Promise.all([
-      mineOverviewRequest,
-      poolInfoTWDReuest,
-      poolInfoLoopRequest,
-      poolInfoVkrRequest,
-    ]);
+  const poolInfoPsiRequest = getPoolInfo(NEXUS_CONTRACTS.pool);
+  const [
+    mineOverview,
+    poolInfoTWD,
+    poolInfoLoop,
+    poolInfoVkr,
+    poolInfoPsi,
+  ]: any = await Promise.all([
+    mineOverviewRequest,
+    poolInfoTWDReuest,
+    poolInfoLoopRequest,
+    poolInfoVkrRequest,
+    poolInfoPsiRequest,
+  ]);
   const minePrice = mineOverview.data.priceInUst;
   const twdPrice = getPrice(poolInfoTWD).toString();
   const loopPrice = getPrice(poolInfoLoop).toString();
   const vkrPrice = getPrice(poolInfoVkr).toString();
+  const psiPrice = getPrice(poolInfoPsi).toString();
   if (symbol === "MINE") {
     price = minePrice;
   } else if (symbol === "LOOP") {
@@ -36,6 +45,8 @@ const getTokenPrice = async (symbol) => {
     price = twdPrice;
   } else if (symbol === "VKR") {
     price = vkrPrice;
+  } else if (symbol === "PSI") {
+    price = psiPrice;
   } else {
     console.log(
       `${symbol} symbol doest not match for price set in pylon gateway`
