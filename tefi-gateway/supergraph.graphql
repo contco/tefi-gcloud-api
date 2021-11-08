@@ -123,6 +123,7 @@ type Assets
   @join__type(graph: TERRAWORLD, key: "address")
   @join__type(graph: TFLOKI, key: "address")
   @join__type(graph: VALKYRIE, key: "address") {
+
   address: String! @join__field(graph: TERRACORE)
   altered: AlteredAccount @join__field(graph: ALTERED)
   anchor: AccountANC @join__field(graph: ANCHOR)
@@ -375,6 +376,7 @@ type MirrorTotal {
 type NexusAccount {
   nexusHoldings: NexusHolding
   nexusPool: NexusPool
+  nexusVault: NexusVault
 }
 
 type NexusHolding {
@@ -404,6 +406,17 @@ type NexusPool {
   token2Staked: String!
   token2UnStaked: String!
   totalLpUstValue: String!
+}
+
+type NexusVault {
+  bEthDeposit: String!
+  bEthDepositValue: String!
+  bEthRewards: String!
+  bEthVaultApr: String!
+  bLunaDeposit: String!
+  bLunaDepositValue: String!
+  bLunaRewards: String!
+  bLunaVaultApr: String!
 }
 
 type Pool {
