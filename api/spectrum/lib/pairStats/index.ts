@@ -2,7 +2,7 @@ import { math } from "@contco/terra-utilities";
 import { calculatePairStats } from "./calculatePairStats";
 import { HEIGHT_PER_YEAR } from "../utils";
 
-export const getPairStats = (
+export const calculateAllFarmPairStats = (
   height,
   pairStatsData,
   specPrice,
@@ -14,7 +14,9 @@ export const getPairStats = (
   pylonPoolInfo,
   anchorPoolInfo,
   terraSwapPoolResponses,
-  twdPoolInfo
+  twdPoolInfo,
+  vkrPoolInfo,
+  nexusPoolInfo
 ) => {
   const pairStats: any = calculatePairStats(
     pairStatsData,
@@ -25,7 +27,9 @@ export const getPairStats = (
     govConfig,
     govVaults,
     terraSwapPoolResponses,
-    twdPoolInfo
+    twdPoolInfo,
+    vkrPoolInfo,
+    nexusPoolInfo
   );
   const pairStatKeys = Object.keys(pairStats);
   const totalWeight = pairStatKeys

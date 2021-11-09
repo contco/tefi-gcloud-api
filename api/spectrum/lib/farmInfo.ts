@@ -5,77 +5,82 @@ import {
   LCD_URL,
 } from "@contco/terra-utilities";
 import { contracts } from "./contracts";
-import { getPairStats } from "./pairStats";
+import { calculateAllFarmPairStats } from "./pairStats";
 import { getRewardInfos } from "./rewardInfos";
 import { getPairStatsData } from "./pairStats/getPairStats";
 import { getGovConfig, getGovState, getGovVaults } from "./gov";
 import { calculateFarmInfos } from "./calculateFarmInfo";
 import { pairInfoList } from "./pairInfoList";
-
-const fetchSpecFarmInfo = async (pool_addr: string) => {
-  const { data }: any = await axios.get(
-    LCD_URL + `wasm/contracts/${pool_addr}/store`,
-    {
-      params: {
-        query_msg: JSON.stringify({
-          pools: {},
-        }),
-      },
-    }
-  );
-
-  return data?.result;
-};
+import { fetchSpecFarmInfo } from "./fetchFarmInfo";
 
 export const getPoolInfos = async () => {
-  const mirrorPoolPromise = fetchSpecFarmInfo(contracts.mirrorFarm);
-  const specPoolPromise = fetchSpecFarmInfo(contracts.specFarm);
-  const pylonPoolPromise = fetchSpecFarmInfo(contracts.pylonFarm);
-  const anchorPoolPromise = fetchSpecFarmInfo(contracts.anchorFarm);
-  const twdPoolPromise = fetchSpecFarmInfo(contracts.terraworldFarm);
-
-  const [mirrorPool, specPool, pylonPool, anchorPool, twdPool] =
-    await Promise.all([
-      mirrorPoolPromise,
-      specPoolPromise,
-      pylonPoolPromise,
-      anchorPoolPromise,
-      twdPoolPromise,
-    ]);
-
   const poolInfo = {};
-  const mirrorPoolInfo = {};
-  const specPoolInfo = {};
-  const pylonPoolInfo = {};
-  const anchorPoolInfo = {};
-  const twdPoolInfo = {};
 
-  specPool?.pools.forEach((pool) => {
+  const [
+    mirrorPool,
+    specPool,
+    pylonPool,
+    anchorPool,
+    twdPool,
+    vkrPool,
+    nexusPool,
+  ] = await Promise.all([
+    fetchSpecFarmInfo(contracts.mirrorFarm),
+    fetchSpecFarmInfo(contracts.specFarm),
+    fetchSpecFarmInfo(contracts.pylonFarm),
+    fetchSpecFarmInfo(contracts.anchorFarm),
+    fetchSpecFarmInfo(contracts.terraworldFarm),
+    fetchSpecFarmInfo(contracts.valkyrieFarm),
+    fetchSpecFarmInfo(contracts.nexusFarm),
+  ]);
+
+  const specPoolInfo = specPool?.pools.reduce((poolInfoList, pool) => {
     poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Spectrum" });
-    specPoolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Spectrum" });
-  });
+    poolInfoList[pool?.asset_token] = Object.assign(pool, { farm: "Spectrum" });
+    return poolInfoList;
+  }, {});
 
-  mirrorPool.pools.forEach((pool) => {
+  const mirrorPoolInfo = mirrorPool.pools.reduce((poolInfoList, pool) => {
     poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Mirror" });
-    mirrorPoolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Mirror" });
-  });
+    poolInfoList[pool?.asset_token] = Object.assign(pool, { farm: "Mirror" });
+    return poolInfoList;
+  }, {});
 
-  pylonPool.pools.forEach((pool) => {
+  const pylonPoolInfo = pylonPool.pools.reduce((poolInfoList, pool) => {
     poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Pylon" });
-    pylonPoolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Pylon" });
-  });
+    poolInfoList[pool?.asset_token] = Object.assign(pool, { farm: "Pylon" });
+    return poolInfoList;
+  }, {});
 
-  anchorPool.pools.forEach((pool) => {
+  const anchorPoolInfo = anchorPool.pools.reduce((poolInfoList, pool) => {
     poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Anchor" });
-    anchorPoolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Anchor" });
-  });
+    poolInfoList[pool?.asset_token] = Object.assign(pool, { farm: "Anchor" });
+    return poolInfoList;
+  }, {});
 
-  twdPool.pools.forEach((pool) => {
+  const twdPoolInfo = twdPool.pools.reduce((poolInfoList, pool) => {
     poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Terraworld" });
-    twdPoolInfo[pool?.asset_token] = Object.assign(pool, {
+    poolInfoList[pool?.asset_token] = Object.assign(pool, {
       farm: "Terraworld",
     });
-  });
+    return poolInfoList;
+  }, {});
+
+  const vkrPoolInfo = vkrPool.pools.reduce((poolInfoList, pool) => {
+    poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Valkyrie" });
+    poolInfoList[pool?.asset_token] = Object.assign(pool, {
+      farm: "Valkyrie",
+    });
+    return poolInfoList;
+  }, {});
+
+  const nexusPoolInfo = nexusPool.pools.reduce((poolInfoList, pool) => {
+    poolInfo[pool?.asset_token] = Object.assign(pool, { farm: "Nexus" });
+    poolInfoList[pool?.asset_token] = Object.assign(pool, {
+      farm: "Nexus",
+    });
+    return poolInfoList;
+  }, {});
 
   return {
     poolInfo,
@@ -84,6 +89,8 @@ export const getPoolInfos = async () => {
     pylonPoolInfo,
     anchorPoolInfo,
     twdPoolInfo,
+    vkrPoolInfo,
+    nexusPoolInfo,
   };
 };
 
@@ -166,6 +173,8 @@ export const getFarmInfos = async (address: string) => {
       pylonPoolInfo,
       anchorPoolInfo,
       twdPoolInfo,
+      vkrPoolInfo,
+      nexusPoolInfo,
     } = poolData;
     const [govState, pairRewardInfos, pairStatsData] = await fetchFarmData(
       height,
@@ -173,7 +182,7 @@ export const getFarmInfos = async (address: string) => {
       terraSwapPoolResponses
     );
     const specPrice = getPrice(terraSwapPoolResponses[contracts.specToken]);
-    const pairStats = getPairStats(
+    const pairStats = calculateAllFarmPairStats(
       height,
       pairStatsData,
       specPrice,
@@ -185,7 +194,9 @@ export const getFarmInfos = async (address: string) => {
       pylonPoolInfo,
       anchorPoolInfo,
       terraSwapPoolResponses,
-      twdPoolInfo
+      twdPoolInfo,
+      vkrPoolInfo,
+      nexusPoolInfo
     );
 
     const { farmInfos, farmsTotal, rewardsTotal } = calculateFarmInfos(

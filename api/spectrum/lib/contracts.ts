@@ -25,4 +25,12 @@ export const contracts = {
   terraworldStaking: "terra10eyxljyqkcvhs4dgr534hk0wehc28tz6gwnh8a",
   terraworldToken: "terra19djkaepjjswucys4npd5ltaxgsntl7jf0xz7w6",
   terraworldFarm: "terra1cdyw7fydevn372re7xjgfh8kqrrf2lxm5k6ve3",
+  valkyrieGov: "terra1w6xf64nlmy3fevmmypx6w2fa34ue74hlye3chk",
+  valkyrieStaking: "terra1ude6ggsvwrhefw2dqjh4j6r7fdmu9nk6nf2z32",
+  valkyrieToken: "terra1dy9kmlm4anr92e42mrkjwzyvfqwz66un00rwr5",
+  valkyrieFarm: "terra1xt4ugaxds6wjehjckqchzg4e99n3cjd2rtfw4f",
+  nexusGov: "terra1xrk6v2tfjrhjz2dsfecj40ps7ayanjx970gy0j",
+  nexusStaking: "terra12kzewegufqprmzl20nhsuwjjq6xu8t8ppzt30a",
+  nexusToken: "terra12897djskt9rge8dtmm86w654g7kzckkd698608",
+  nexusFarm: "terra1j2hdp4jelqe9tkfwnsx5mlheqagaryxhqwr4h2",
 };

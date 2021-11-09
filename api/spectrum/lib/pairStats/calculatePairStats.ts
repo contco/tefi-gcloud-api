@@ -3,6 +3,8 @@ import { calculateSpecPairStats } from "./specPairStats";
 import { calculatePylonPairStats } from "./pylonPairStats";
 import { calculateAnchorPairStats } from "./anchorPairStats";
 import { calculateTwdPairStats } from "./twdPairStats";
+import { calculateVkrPairStats } from "./vkrPairStats";
+import { calculateNexusPairStats } from "./nexusPairStats";
 
 export const calculatePairStats = (
   pairStatsData,
@@ -13,14 +15,19 @@ export const calculatePairStats = (
   govConfig,
   govVaults,
   terraSwapPoolResponses,
-  twdPoolInfo
+  twdPoolInfo,
+  vkrPoolInfo,
+  nexusPoolInfo
 ) => {
   const {
     anchorPairStatsData,
     mirrorPairStatsData,
     pylonPairStatsData,
     twdPairStatsData,
+    vkrPairStatsData,
+    nexusPairStatsData,
   } = pairStatsData;
+
   const mirrorStats = calculateMirrorPairStats(
     mirrorPairStatsData,
     mirrorPoolInfo,
@@ -51,14 +58,31 @@ export const calculatePairStats = (
     twdPairStatsData,
     twdPoolInfo,
     govVaults,
+    terraSwapPoolResponses
+  );
+
+  const vkrStats = calculateVkrPairStats(
+    vkrPairStatsData,
+    vkrPoolInfo,
+    govVaults,
+    terraSwapPoolResponses
+  );
+
+  const nexusStats = calculateNexusPairStats(
+    nexusPairStatsData,
+    nexusPoolInfo,
+    govVaults,
     govConfig,
     terraSwapPoolResponses
   );
+
   return {
     ...mirrorStats,
     ...specStats,
     ...pylonStats,
     ...anchorStats,
     ...twdStats,
+    ...vkrStats,
+    ...nexusStats,
   };
 };

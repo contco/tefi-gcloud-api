@@ -34,12 +34,24 @@ const fetchRewardInfos = async (address) => {
     address,
     contracts.terraworldFarm
   );
+
+  const vkrRewardInfosRequest = rewardInfoRequest(
+    address,
+    contracts.valkyrieFarm
+  );
+  const nexusRewardInfosRequest = rewardInfoRequest(
+    address,
+    contracts.nexusFarm
+  );
+
   const result = await Promise.all([
     mirrorRewardsInfoRequest,
     specRewardInfosRequest,
     pylonRewardInfosRequest,
     anchorRewardInfosRequest,
     twdRewardInfosRequest,
+    vkrRewardInfosRequest,
+    nexusRewardInfosRequest,
   ]);
   return result;
 };
@@ -51,13 +63,18 @@ export const getRewardInfos = async (address: string) => {
     pylonRewardInfos,
     anchorRewardInfos,
     twdRewardInfos,
+    vkrRewardInfos,
+    nexusRewardInfos,
   ] = await fetchRewardInfos(address);
+
   const rewardInfos = formatRewardInfos([
     ...mirrorRewardInfos,
     ...specRewardInfos,
     ...pylonRewardInfos,
     ...anchorRewardInfos,
     ...twdRewardInfos,
+    ...vkrRewardInfos,
+    ...nexusRewardInfos,
   ]);
   return rewardInfos;
 };

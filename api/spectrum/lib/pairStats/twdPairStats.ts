@@ -114,7 +114,6 @@ export const calculateTwdPairStats = (
   twdStatsData,
   poolInfos,
   govVaults,
-  govConfig,
   terraSwapPoolResponses
 ) => {
   const { rewardInfo, farmConfig, apr, apy } = twdStatsData;
