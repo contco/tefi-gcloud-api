@@ -47,6 +47,12 @@ const getStakedTokenSymbol = (farm: string) => {
     case "Terraworld":
       symbol = "TWD";
       break;
+    case "Valkyrie":
+      symbol = "VKR";
+      break;
+    case "Nexus":
+      symbol = "PSI";
+      break;
     default:
       symbol = "SPEC";
   }

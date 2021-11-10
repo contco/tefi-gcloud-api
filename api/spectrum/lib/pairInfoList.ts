@@ -543,4 +543,36 @@ export const pairInfoList = {
     contract_addr: "terra1etdkg9p0fkl8zal6ecp98kypd32q8k3ryced9d",
     liquidity_token: "terra1c9wr85y8p8989tr58flz5gjkqp8q2r6murwpm9",
   },
+  terra1dy9kmlm4anr92e42mrkjwzyvfqwz66un00rwr5: {
+    asset_infos: [
+      {
+        token: {
+          contract_addr: "terra1dy9kmlm4anr92e42mrkjwzyvfqwz66un00rwr5",
+        },
+      },
+      {
+        native_token: {
+          denom: "uusd",
+        },
+      },
+    ],
+    contract_addr: "terra1e59utusv5rspqsu8t37h5w887d9rdykljedxw0",
+    liquidity_token: "terra17fysmcl52xjrs8ldswhz7n6mt37r9cmpcguack",
+  },
+  terra12897djskt9rge8dtmm86w654g7kzckkd698608: {
+    asset_infos: [
+      {
+        token: {
+          contract_addr: "terra12897djskt9rge8dtmm86w654g7kzckkd698608",
+        },
+      },
+      {
+        native_token: {
+          denom: "uusd",
+        },
+      },
+    ],
+    contract_addr: "terra163pkeeuwxzr0yhndf8xd2jprm9hrtk59xf7nqf",
+    liquidity_token: "terra1q6r8hfdl203htfvpsmyh8x689lp2g0m7856fwd",
+  },
 };

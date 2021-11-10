@@ -123,7 +123,6 @@ type Assets
   @join__type(graph: TERRAWORLD, key: "address")
   @join__type(graph: TFLOKI, key: "address")
   @join__type(graph: VALKYRIE, key: "address") {
-
   address: String! @join__field(graph: TERRACORE)
   altered: AlteredAccount @join__field(graph: ALTERED)
   anchor: AccountANC @join__field(graph: ANCHOR)
