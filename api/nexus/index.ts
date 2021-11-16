@@ -46,6 +46,7 @@ const typeDefs = gql`
   type NexusAccount {
     nexusHoldings: NexusHolding
     nexusPool: NexusPool
+    nexusPools: [NexusPool!]
     nexusVault: NexusVault
   }
 
