@@ -1,4 +1,5 @@
-import { math, MICRO, UUSD_DENOM } from "@contco/terra-utilities";
+import { MICRO, UUSD_DENOM } from "@contco/terra-utilities";
+
 export const calculateApr = (
   poolResponse: any,
   stakingState: any,

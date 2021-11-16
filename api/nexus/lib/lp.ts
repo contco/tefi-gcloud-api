@@ -6,7 +6,7 @@ import {
   getPoolInfo,
   getPrice,
 } from "@contco/terra-utilities";
-import { NEXUS_CONTRACTS, NEXUS_POOL_CONTRACTS } from "./contracts";
+import { NEXUS_CONTRACTS, NEXUS_POOL_CONTRACTS } from "./constants";
 import { calculateApr } from "./calculateApr";
 
 export const fetchAvailableLp = async (

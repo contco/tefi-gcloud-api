@@ -1,3 +1,5 @@
+export const NEXUS_GRAPH_API = "https://api.nexusprotocol.app/graphql";
+
 export const NEXUS_CONTRACTS = {
   token: "terra12897djskt9rge8dtmm86w654g7kzckkd698608",
   pool: "terra163pkeeuwxzr0yhndf8xd2jprm9hrtk59xf7nqf",
@@ -15,6 +17,7 @@ export const NEXUS_CONTRACTS = {
   nEthLiquidity: "terra1y8kxhfg22px5er32ctsgjvayaj8q36tr590qtp",
   nEthToken: "terra178v546c407pdnx5rer3hu8s2c0fc924k74ymnn",
   nEthStaking: "terra1lws09x0slx892ux526d6atwwgdxnjg58uan8ph",
+  nexusGov: "terra1xrk6v2tfjrhjz2dsfecj40ps7ayanjx970gy0j",
 };
 
 export const NEXUS_POOL_CONTRACTS = [
