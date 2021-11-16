@@ -375,9 +375,9 @@ type MirrorTotal {
 type NexusAccount {
   nexusGov: NexusGov
   nexusHoldings: NexusHolding
-  nexusPool: NexusPool
   nexusPools: [NexusPool!]
   nexusVault: NexusVault
+  total: NexusTotal
 }
 
 type NexusGov {
@@ -417,6 +417,11 @@ type NexusPool {
   token2Staked: String!
   token2UnStaked: String!
   totalLpUstValue: String!
+}
+
+type NexusTotal {
+  nexusPoolRewardsSum: String!
+  nexusPoolSum: String!
 }
 
 type NexusVault {

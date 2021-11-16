@@ -53,12 +53,17 @@ const typeDefs = gql`
     apr: String!
   }
 
+  type NexusTotal {
+    nexusPoolSum: String!
+    nexusPoolRewardsSum: String!
+  }
+
   type NexusAccount {
     nexusHoldings: NexusHolding
-    nexusPool: NexusPool
     nexusPools: [NexusPool!]
     nexusVault: NexusVault
     nexusGov: NexusGov
+    total: NexusTotal
   }
 
   extend type Assets @key(fields: "address") {

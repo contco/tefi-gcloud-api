@@ -70,17 +70,24 @@ export const fetchNexusPools = async (address: string) => {
 
 export const getNexusPoolDetails = async (address: string) => {
   const { poolWasmInfos, nexusPrice } = await fetchNexusPools(address);
+  let nexusPoolSum = "0";
+  let nexusPoolRewardsSum = "0";
   const nexusPools = NEXUS_POOL_CONTRACTS.reduce(
     (poolAcm: any, pair: any, index: number) => {
       const poolDetail = getNexusPool(poolWasmInfos[index], nexusPrice, pair);
       if (poolDetail) {
         poolAcm.push(poolDetail);
+        nexusPoolSum = math.plus(nexusPoolSum, poolDetail?.totalLpUstValue);
+        nexusPoolRewardsSum = math.plus(
+          nexusPoolRewardsSum,
+          poolDetail?.rewardsValue
+        );
       }
       return poolAcm;
     },
     []
   );
-  return nexusPools;
+  return { nexusPools, nexusPoolSum, nexusPoolRewardsSum };
 };
 
 const getLpUstValues = (

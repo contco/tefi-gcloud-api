@@ -33,7 +33,7 @@ export const fetchGovState = async (address: string) => {
 
 export const getNexusGov = (govState: any, nexusPrice: string) => {
   const { userGov, govApr } = govState;
-  if (userGov?.balance !== "0") {
+  if (userGov?.balance && userGov?.balance !== "0") {
     const staked = math.div(userGov?.balance, MICRO.toString());
     const value = math.times(staked, nexusPrice);
     const apr = govApr?.getGovStakingAprRecords[0]?.govStakingApr ?? 0;
