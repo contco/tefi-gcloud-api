@@ -51,3 +51,7 @@ subgraphs:
     routing_url: http://us-central1-tefiserver.cloudfunctions.net/valkyrie-graphql
     schema:
       subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/valkyrie-graphql
+  knowhere:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/knowhere-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/knowhere-graphql

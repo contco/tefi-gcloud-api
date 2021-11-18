@@ -21,7 +21,8 @@
     "deploy-altered": "gcloud functions deploy altered-graphql --entry-point alteredHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
     "deploy-tfloki": "gcloud functions deploy tfloki-graphql --entry-point tflokiHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
     "deploy-nexus": "gcloud functions deploy nexus-graphql --entry-point nexusHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
-    "deploy-valkyrie": "gcloud functions deploy valkyrie-graphql --entry-point valkyrieHandler --runtime nodejs14 --trigger-http --allow-unauthenticated"
+    "deploy-valkyrie": "gcloud functions deploy valkyrie-graphql --entry-point valkyrieHandler --runtime nodejs14 --trigger-http --allow-unauthenticated",
+    "deploy-knowhere": "gcloud functions deploy knowhere-graphql --entry-point knowhereHandler --runtime nodejs14 --trigger-http --allow-unauthenticated"
   },
   "lint-staged": {
     "*.{ts,tsx}": [

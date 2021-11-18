@@ -11,6 +11,7 @@ import alteredHandler from "./api/altered";
 import tflokiHandler from "./api/tfloki";
 import nexusHandler from "./api/nexus";
 import valkyrieHandler from "./api/valkyrie";
+import knowhereHandler from "./api/knowhere";
 
 export {
   terraCoreHandler,
@@ -26,4 +27,5 @@ export {
   tflokiHandler,
   nexusHandler,
   valkyrieHandler,
+  knowhereHandler,
 };

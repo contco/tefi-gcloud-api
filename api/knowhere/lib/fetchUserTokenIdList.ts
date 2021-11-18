@@ -1,14 +1,23 @@
 import { request } from "graphql-request";
 import { MANTLE_URL } from "../../constants";
 import { generateMantleQueryFromBatches } from "./generateMantleQueryFromBatches";
+import {
+  Collection,
+  MantleResponse,
+  MantleData,
+  QueriesInfo,
+  TokensInfo,
+} from "./type";
 
-const formatTokensListFromMantleResponse = (mantleResults: any) => {
+const formatTokensListFromMantleResponse = (
+  mantleResults: MantleResponse[]
+) => {
   const tokensList = mantleResults.reduce(
-    (tokensList: any, mantleResponse: any) => {
+    (tokensList: TokensInfo[], mantleResponse: MantleResponse) => {
       const mantleResultList = Object.values(mantleResponse);
       const nftContractsList = Object.keys(mantleResponse);
-      const batchTokenList: any = mantleResultList.reduce(
-        (tokenList: any, mantleResult: any, index) => {
+      const batchTokenList: TokensInfo[] = mantleResultList.reduce(
+        (tokenList: TokensInfo[], mantleResult: MantleData, index) => {
           const parsedResult = JSON.parse(mantleResult.Result);
           if (parsedResult.tokens.length > 0) {
             tokenList.push({
@@ -28,7 +37,7 @@ const formatTokensListFromMantleResponse = (mantleResults: any) => {
 };
 
 export const fetchUserTokenIdList = async (
-  nftContractBatches: any,
+  nftContractBatches: Collection[][],
   address: string
 ) => {
   const mantleQueryList = generateMantleQueryFromBatches(
@@ -36,7 +45,7 @@ export const fetchUserTokenIdList = async (
     address
   );
   const mantleResultsPromise = mantleQueryList.map(
-    async (queryDetails: any) => {
+    async (queryDetails: QueriesInfo) => {
       const result = await request(
         MANTLE_URL,
         queryDetails.query,
@@ -45,7 +54,9 @@ export const fetchUserTokenIdList = async (
       return result;
     }
   );
-  const mantleResults = await Promise.all(mantleResultsPromise);
+  const mantleResults: MantleResponse[] = await Promise.all(
+    mantleResultsPromise
+  );
   const userNftTokensList = formatTokensListFromMantleResponse(mantleResults);
   return userNftTokensList;
 };
