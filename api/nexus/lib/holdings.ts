@@ -1,5 +1,5 @@
 import { wasmStoreRequest, math, MICRO } from "@contco/terra-utilities";
-import { NEXUS_CONTRACTS } from "./contracts";
+import { NEXUS_CONTRACTS } from "./constants";
 
 const SYMBOL = "PSI";
 const NAME = "Nexus Psi";

@@ -43,10 +43,27 @@ const typeDefs = gql`
     bEthVaultApr: String!
   }
 
+  type NexusGov {
+    name: String!
+    symbol: String!
+    staked: String!
+    value: String!
+    rewards: String!
+    price: String!
+    apr: String!
+  }
+
+  type NexusTotal {
+    nexusPoolSum: String!
+    nexusPoolRewardsSum: String!
+  }
+
   type NexusAccount {
     nexusHoldings: NexusHolding
-    nexusPool: NexusPool
+    nexusPools: [NexusPool!]
     nexusVault: NexusVault
+    nexusGov: NexusGov
+    total: NexusTotal
   }
 
   extend type Assets @key(fields: "address") {

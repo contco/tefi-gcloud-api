@@ -8,7 +8,7 @@ import {
 import { fetchData } from "../../commons";
 import { poolContracts, PYLON_API_ENDPOINT } from "./constants";
 import { contracts as terraworldContracts } from "../../terraworld/lib/contracts";
-import { NEXUS_CONTRACTS } from "../../nexus/lib/contracts";
+import { NEXUS_CONTRACTS } from "../../nexus/lib/constants";
 
 const getTokenPrice = async (symbol) => {
   let price;

@@ -20,8 +20,8 @@ export const getNexusPairStatsData = async (
       await Promise.all([
         rewardInfoPromise,
         farmConfigPromise,
-        fetchStakingState(),
-        fetchStakingConfig(),
+        fetchStakingState(contracts.nexusStaking),
+        fetchStakingConfig(contracts.nexusStaking),
       ]);
     const nexusPrice = getPrice(poolResponse);
     const apr = calculateApr(

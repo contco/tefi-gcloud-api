@@ -1,49 +1,50 @@
 import { getPoolInfo, getPrice } from "@contco/terra-utilities";
 import { fetchHoldings, getHoldings } from "./holdings";
-import {
-  fetchAvailableLp,
-  fetchStakedLp,
-  fetchStakingConfig,
-  fetchStakingState,
-  getNexusPool,
-} from "./lp";
-import { NEXUS_CONTRACTS } from "./contracts";
-import { fetchVaultData } from "./vault";
+import { getNexusPoolDetails } from "./lp";
+import { NEXUS_CONTRACTS } from "./constants";
+import { fetchVaultData, EMPTY_VAULT } from "./vault";
+import { fetchGovState, getNexusGov } from "./gov";
 
 const fetchData = (address: string) => {
   const result = Promise.all([
     fetchHoldings(address),
     getPoolInfo(NEXUS_CONTRACTS.pool),
-    fetchAvailableLp(address),
-    fetchStakedLp(address),
-    fetchStakingState(),
-    fetchStakingConfig(),
+    getNexusPoolDetails(address),
     fetchVaultData(address),
+    fetchGovState(address),
   ]);
   return result;
 };
 
 export const getNexusAccount = async (address: string) => {
-  const [
-    holdingsInfo,
-    poolInfo,
-    availableLp,
-    stakedLp,
-    stakingState,
-    stakingConfig,
-    nexusVault,
-  ] = await fetchData(address);
-  const nexusPrice = getPrice(poolInfo);
-  const nexusHoldings = getHoldings(holdingsInfo, nexusPrice);
-  const nexusPool = getNexusPool(
-    availableLp,
-    stakedLp,
-    poolInfo,
-    stakingState,
-    stakingConfig,
-    nexusPrice
-  );
-  const nexusAccount = { nexusHoldings, nexusPool, nexusVault };
+  try {
+    const [
+      holdingsInfo,
+      poolInfo,
+      { nexusPools, nexusPoolSum, nexusPoolRewardsSum },
+      nexusVault,
+      govState,
+    ] = await fetchData(address);
+    const nexusPrice = getPrice(poolInfo);
+    const nexusHoldings = getHoldings(holdingsInfo, nexusPrice);
+    const nexusGov = getNexusGov(govState, nexusPrice);
+    const total = { nexusPoolSum, nexusPoolRewardsSum };
+    const nexusAccount = {
+      nexusHoldings,
+      nexusPools,
+      nexusGov,
+      nexusVault,
+      total,
+    };
 
-  return nexusAccount;
+    return nexusAccount;
+  } catch (err) {
+    return {
+      nexusHoldings: null,
+      nexusPools: [],
+      nexusGov: null,
+      nexusVault: EMPTY_VAULT,
+      total: { nexusPoolSum: "0", nexusPoolRewardsSum: "0" },
+    };
+  }
 };

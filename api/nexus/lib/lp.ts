@@ -3,69 +3,163 @@ import {
   calculateLpBonding,
   math,
   MICRO,
+  getPoolInfo,
+  getPrice,
 } from "@contco/terra-utilities";
-import { NEXUS_CONTRACTS } from "./contracts";
+import { NEXUS_CONTRACTS, NEXUS_POOL_CONTRACTS } from "./constants";
 import { calculateApr } from "./calculateApr";
 
-const SYMBOL1 = "UST";
-const SYMBOL2 = "PSI";
-const LP_NAME = "PSI-UST";
-
-export const fetchAvailableLp = async (address: string) => {
+export const fetchAvailableLp = async (
+  address: string,
+  liquidityContract: string
+) => {
   const query_msg = { balance: { address } };
-  const result = wasmStoreRequest(NEXUS_CONTRACTS.liquidity, query_msg);
+  const result = wasmStoreRequest(liquidityContract, query_msg);
   return result;
 };
 
-export const fetchStakedLp = (address: string) => {
+export const fetchStakedLp = (address: string, stakingContract: string) => {
   const time_seconds = Math.round(new Date().getTime() / 1000);
   const query_msg = { staker_info: { staker: address, time_seconds } };
-  const result = wasmStoreRequest(NEXUS_CONTRACTS.staking, query_msg);
+  const result = wasmStoreRequest(stakingContract, query_msg);
   return result;
 };
 
-export const fetchStakingState = () => {
+export const fetchStakingState = (stakingContract: string) => {
   const query_msg = { state: {} };
-  const result = wasmStoreRequest(NEXUS_CONTRACTS.staking, query_msg);
+  const result = wasmStoreRequest(stakingContract, query_msg);
   return result;
 };
 
-export const fetchStakingConfig = () => {
+export const fetchStakingConfig = (stakingContract: string) => {
   const query_msg = { config: {} };
-  const result = wasmStoreRequest(NEXUS_CONTRACTS.staking, query_msg);
+  const result = wasmStoreRequest(stakingContract, query_msg);
   return result;
 };
 
-export const getNexusPool = (
-  availableLpInfo: any,
-  stakedLpInfo: any,
-  poolInfo: any,
-  stakingState: any,
-  stakingConfig: any,
-  nexusPrice: string
+export const fetchNexusPools = async (address: string) => {
+  let nexusPrice: string;
+  const poolPromises = NEXUS_POOL_CONTRACTS.map(async (pair: any) => {
+    const [
+      availableLpInfo,
+      stakedLpInfo,
+      stakingState,
+      stakingConfig,
+      poolInfo,
+    ] = await Promise.all([
+      fetchAvailableLp(address, pair.liquidity),
+      fetchStakedLp(address, pair.staking),
+      fetchStakingState(pair.staking),
+      fetchStakingConfig(pair.staking),
+      getPoolInfo(pair.pool),
+    ]);
+    if (pair.pool === NEXUS_CONTRACTS.pool) {
+      nexusPrice = getPrice(poolInfo);
+    }
+    return {
+      availableLpInfo,
+      stakedLpInfo,
+      stakingState,
+      stakingConfig,
+      poolInfo,
+    };
+  });
+  const poolWasmInfos = await Promise.all(poolPromises);
+  return { poolWasmInfos, nexusPrice };
+};
+
+export const getNexusPoolDetails = async (address: string) => {
+  const { poolWasmInfos, nexusPrice } = await fetchNexusPools(address);
+  let nexusPoolSum = "0";
+  let nexusPoolRewardsSum = "0";
+  const nexusPools = NEXUS_POOL_CONTRACTS.reduce(
+    (poolAcm: any, pair: any, index: number) => {
+      const poolDetail = getNexusPool(poolWasmInfos[index], nexusPrice, pair);
+      if (poolDetail) {
+        poolAcm.push(poolDetail);
+        nexusPoolSum = math.plus(nexusPoolSum, poolDetail?.totalLpUstValue);
+        nexusPoolRewardsSum = math.plus(
+          nexusPoolRewardsSum,
+          poolDetail?.rewardsValue
+        );
+      }
+      return poolAcm;
+    },
+    []
+  );
+  return { nexusPools, nexusPoolSum, nexusPoolRewardsSum };
+};
+
+const getLpUstValues = (
+  stakedLpValue: number,
+  stakeableLpValue: number,
+  isUstPair: boolean,
+  nexusPrice: number
 ) => {
-  if (availableLpInfo?.balance !== "0" || stakedLpInfo?.bond_amount !== "0") {
+  if (isUstPair) {
+    const totalLpUstValue = stakedLpValue + stakeableLpValue;
+    return {
+      stakeableLpUstValue: stakeableLpValue,
+      stakedLpUstValue: stakedLpValue,
+      totalLpUstValue,
+    };
+  } else {
+    const stakedLpUstValue = stakedLpValue * nexusPrice;
+    const stakeableLpUstValue = stakeableLpValue * nexusPrice;
+    const totalLpUstValue = stakedLpUstValue + stakeableLpUstValue;
+    return { stakeableLpUstValue, stakedLpUstValue, totalLpUstValue };
+  }
+};
+
+const getNexusPool = (
+  poolWasmInfo: any,
+  nexusPrice: string,
+  pairDetails: any
+) => {
+  if (
+    poolWasmInfo.availableLpInfo?.balance !== "0" ||
+    poolWasmInfo.stakedLpInfo?.bond_amount !== "0"
+  ) {
     const {
       token1: token1UnStaked,
       token2: token2UnStaked,
       lpAmount: stakeableLp,
-      lpUstValue: stakeableLpUstValue,
-    } = calculateLpBonding(availableLpInfo?.balance, poolInfo);
+      lpUstValue: stakeableLpValue,
+    } = calculateLpBonding(
+      poolWasmInfo.availableLpInfo?.balance,
+      poolWasmInfo.poolInfo
+    );
     const {
       token1: token1Staked,
       token2: token2Staked,
       lpAmount: stakedLp,
-      lpUstValue: stakedLpUstValue,
-    } = calculateLpBonding(stakedLpInfo?.bond_amount, poolInfo);
-    const rewards = (stakedLpInfo?.pending_reward / MICRO).toString();
+      lpUstValue: stakedLpValue,
+    } = calculateLpBonding(
+      poolWasmInfo.stakedLpInfo?.bond_amount,
+      poolWasmInfo.poolInfo
+    );
+    const rewards = (
+      poolWasmInfo.stakedLpInfo?.pending_reward / MICRO
+    ).toString();
     const rewardsValue = math.times(rewards, nexusPrice);
-    const rewardsSymbol = SYMBOL2;
-    const totalLpUstValue = stakedLpUstValue + stakeableLpUstValue;
-    const apr = calculateApr(poolInfo, stakingState, stakingConfig, nexusPrice);
+    const { totalLpUstValue, stakeableLpUstValue, stakedLpUstValue } =
+      getLpUstValues(
+        stakedLpValue,
+        stakeableLpValue,
+        pairDetails.isUstPair,
+        parseFloat(nexusPrice)
+      );
+    const apr = calculateApr(
+      poolWasmInfo.poolInfo,
+      poolWasmInfo.stakingState,
+      poolWasmInfo.stakingConfig,
+      nexusPrice,
+      pairDetails.isUstPair
+    );
     return {
-      symbol1: SYMBOL1,
-      symbol2: SYMBOL2,
-      lpName: LP_NAME,
+      symbol1: pairDetails.symbol1,
+      symbol2: pairDetails.symbol2,
+      lpName: `${pairDetails.symbol2}-${pairDetails.symbol1}`,
       token1Staked: token1Staked.toString(),
       token1UnStaked: token1UnStaked.toString(),
       token2Staked: token2Staked.toString(),
@@ -77,7 +171,7 @@ export const getNexusPool = (
       totalLpUstValue: totalLpUstValue.toString(),
       rewards,
       rewardsValue,
-      rewardsSymbol,
+      rewardsSymbol: pairDetails.rewardsSymbol,
       apr,
       price: nexusPrice,
     };
