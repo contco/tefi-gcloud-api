@@ -114,6 +114,7 @@ type Assets
   @join__type(graph: ALTERED, key: "address")
   @join__type(graph: ANCHOR, key: "address")
   @join__type(graph: APOLLO, key: "address")
+  @join__type(graph: KNOWHERE, key: "address")
   @join__type(graph: LOTERRA, key: "address")
   @join__type(graph: MIRROR, key: "address")
   @join__type(graph: NEXUS, key: "address")
@@ -128,6 +129,7 @@ type Assets
   anchor: AccountANC @join__field(graph: ANCHOR)
   apolloDao: ApolloDaoAccount @join__field(graph: APOLLO)
   core: Core @join__field(graph: TERRACORE)
+  knowhere: KnowhereAccount @join__field(graph: KNOWHERE)
   loterra: LoterraAccount @join__field(graph: LOTERRA)
   mirror: Account @join__field(graph: MIRROR)
   nexus: NexusAccount @join__field(graph: NEXUS)
@@ -234,6 +236,21 @@ type GovData {
   staked: String!
   symbol: String!
   value: String!
+}
+
+type KnowhereAccount {
+  nfts: [KnowhereNft]
+}
+
+type KnowhereNft {
+  attributes: [NftAttributes]
+  collectionName: String
+  description: String
+  image: String
+  marketplace: String
+  name: String
+  nftContract: String
+  tokenId: String
 }
 
 type LPData {
@@ -433,6 +450,12 @@ type NexusVault {
   bLunaDepositValue: String!
   bLunaRewards: String!
   bLunaVaultApr: String!
+}
+
+type NftAttributes {
+  display_type: String
+  trait_type: String
+  value: String
 }
 
 type Pool {
@@ -811,6 +834,11 @@ enum join__Graph {
     @join__graph(
       name: "apollo"
       url: "http://us-central1-tefiserver.cloudfunctions.net/apollo-graphql"
+    )
+  KNOWHERE
+    @join__graph(
+      name: "knowhere"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/knowhere-graphql"
     )
   LOTERRA
     @join__graph(
