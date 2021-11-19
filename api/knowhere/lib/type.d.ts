@@ -88,5 +88,6 @@ export interface NftInfo {
   image?: string;
   collectionName?: string;
   marketplace?: string;
+  symbol?: string;
   attributes?: Attributes[];
 }
