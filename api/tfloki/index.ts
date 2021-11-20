@@ -32,9 +32,35 @@ const typeDefs = gql`
     apr: String!
   }
 
+  type NftAttributes {
+    display_type: String
+    trait_type: String
+    value: String
+  }
+
+  type Skills {
+    skill_type: String
+    value: Int
+  }
+
+  type TerraFlokiNft {
+    tokenId: String
+    nftContract: String
+    name: String
+    description: String
+    image: String
+    collectionName: String
+    marketplace: String
+    class: String
+    rarity: String
+    skills: [Skills]
+    attributes: [NftAttributes]
+  }
+
   type TFlokiAccount {
     tflokiHoldings: TFlokiHolding
     flokiPool: FlokiPool
+    nfts: [TerraFlokiNft]
   }
 
   extend type Assets @key(fields: "address") {

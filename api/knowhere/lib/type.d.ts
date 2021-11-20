@@ -80,6 +80,11 @@ export interface TokensInfo {
   tokens: string[];
 }
 
+interface Skills {
+  skill_type?: string;
+  value?: number;
+}
+
 export interface NftInfo {
   tokenId?: string;
   nftContract?: string;
@@ -89,5 +94,8 @@ export interface NftInfo {
   collectionName?: string;
   marketplace?: string;
   symbol?: string;
+  class?: string;
+  rarity?: string;
+  skills?: Skills[];
   attributes?: Attributes[];
 }
