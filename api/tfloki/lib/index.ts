@@ -1,6 +1,7 @@
 import { getPoolInfo, getPrice } from "@contco/terra-utilities";
 import { fetchPoolApr } from "./calculateApr";
 import { TFLOKI_CONTRACTS } from "./contracts";
+import { getTFlokiNfts } from "./getTflokiNfts";
 import { fetchHoldings, getHoldings } from "./holdings";
 import { fetchAvailableLp, fetchStakedLp, getFlokiPool } from "./lp";
 
@@ -11,12 +12,13 @@ const fetchData = (address: string) => {
     fetchAvailableLp(address),
     fetchStakedLp(address),
     fetchPoolApr(),
+    getTFlokiNfts(address),
   ]);
   return result;
 };
 
 export const getTFlokiAccount = async (address: string) => {
-  const [holdingsInfo, poolInfo, availableLp, stakedLp, poolApr] =
+  const [holdingsInfo, poolInfo, availableLp, stakedLp, poolApr, nfts] =
     await fetchData(address);
   const tflokiPrice = getPrice(poolInfo);
   const userHoldings = getHoldings(holdingsInfo, tflokiPrice);
@@ -27,6 +29,6 @@ export const getTFlokiAccount = async (address: string) => {
     tflokiPrice,
     poolApr
   );
-  const tflokiAccount = { tflokiHoldings: userHoldings, flokiPool };
+  const tflokiAccount = { tflokiHoldings: userHoldings, flokiPool, nfts };
   return tflokiAccount;
 };

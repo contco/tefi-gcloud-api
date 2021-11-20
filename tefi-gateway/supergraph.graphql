@@ -591,6 +591,11 @@ type Reward {
   staked: String
 }
 
+type Skills {
+  skill_type: String
+  value: Int
+}
+
 type SpecFarms {
   apy: String!
   farm: String!
@@ -691,6 +696,7 @@ type StarTerraPools {
 
 type TFlokiAccount {
   flokiPool: FlokiPool
+  nfts: [TerraFlokiNft]
   tflokiHoldings: TFlokiHolding
 }
 
@@ -747,6 +753,20 @@ type TWDPool {
   token2Staked: String!
   token2UnStaked: String!
   totalLpUstValue: String!
+}
+
+type TerraFlokiNft {
+  attributes: [NftAttributes]
+  class: String
+  collectionName: String
+  description: String
+  image: String
+  marketplace: String
+  name: String
+  nftContract: String
+  rarity: String
+  skills: [Skills]
+  tokenId: String
 }
 
 type Time {

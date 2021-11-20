@@ -5,7 +5,7 @@ import { MantleData, NftInfo } from "../../knowhere/lib/type";
 
 const MARKETPLACE = "RandomEarth";
 
-const getNftId = (idInfo: string) => {
+export const getNftId = (idInfo: string) => {
   const id = idInfo.slice(3, idInfo.length - 1);
   return id;
 };
