@@ -55,3 +55,7 @@ subgraphs:
     routing_url: http://us-central1-tefiserver.cloudfunctions.net/knowhere-graphql
     schema:
       subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/knowhere-graphql
+  randomearth:
+    routing_url: http://us-central1-tefiserver.cloudfunctions.net/randomearth-graphql
+    schema:
+      subgraph_url: http://us-central1-tefiserver.cloudfunctions.net/randomearth-graphql

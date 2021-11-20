@@ -119,6 +119,7 @@ type Assets
   @join__type(graph: MIRROR, key: "address")
   @join__type(graph: NEXUS, key: "address")
   @join__type(graph: PYLON, key: "address")
+  @join__type(graph: RANDOMEARTH, key: "address")
   @join__type(graph: SPECTRUM, key: "address")
   @join__type(graph: STARTERRA, key: "address")
   @join__type(graph: TERRAWORLD, key: "address")
@@ -134,6 +135,7 @@ type Assets
   mirror: Account @join__field(graph: MIRROR)
   nexus: NexusAccount @join__field(graph: NEXUS)
   pylon: PylonAccount @join__field(graph: PYLON)
+  randomearth: RandomEarthAccount @join__field(graph: RANDOMEARTH)
   spectrum: SpectrumAccount @join__field(graph: SPECTRUM)
   starterra: StarTerraAccount @join__field(graph: STARTERRA)
   terraSwapPool: Pool @join__field(graph: TERRACORE)
@@ -561,6 +563,22 @@ type Query {
   assets(address: String!): Assets @join__field(graph: TERRACORE)
 }
 
+type RandomEarthAccount {
+  nfts: [RandomEarthNft]
+}
+
+type RandomEarthNft {
+  attributes: [NftAttributes]
+  collectionName: String
+  description: String
+  image: String
+  marketplace: String
+  name: String
+  nftContract: String
+  symbol: String
+  tokenId: String
+}
+
 type RequestData {
   amount: Amount
   time: Time
@@ -859,6 +877,11 @@ enum join__Graph {
     @join__graph(
       name: "pylon"
       url: "https://us-central1-tefiserver.cloudfunctions.net/pylon-graphql"
+    )
+  RANDOMEARTH
+    @join__graph(
+      name: "randomearth"
+      url: "http://us-central1-tefiserver.cloudfunctions.net/randomearth-graphql"
     )
   SPECTRUM
     @join__graph(

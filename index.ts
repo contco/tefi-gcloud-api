@@ -12,6 +12,7 @@ import tflokiHandler from "./api/tfloki";
 import nexusHandler from "./api/nexus";
 import valkyrieHandler from "./api/valkyrie";
 import knowhereHandler from "./api/knowhere";
+import randomearthHandler from "./api/randomearth";
 
 export {
   terraCoreHandler,
@@ -28,4 +29,5 @@ export {
   nexusHandler,
   valkyrieHandler,
   knowhereHandler,
+  randomearthHandler,
 };
